@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TLG麻将约桌 - 科技版</title>
+    <title>TLG麻将约桌</title>
     <style>
         * {
             margin: 0;
@@ -157,7 +157,7 @@
         
         .single-group-container {
             display: none;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
         
@@ -171,9 +171,8 @@
             border: 1px solid rgba(0, 255, 157, 0.2);
             border-radius: 20px;
             padding: 40px;
-            /* 移除固定高度限制，让内容自然展开 */
             min-height: auto;
-            /* 移除滚动条 */
+            max-height: none;
             overflow: visible;
             transition: all 0.3s ease;
             position: relative;
@@ -219,7 +218,7 @@
         
         .section-title {
             font-size: 1.2em;
-            color: #00b4ff;
+            color: #ffffff;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
@@ -228,6 +227,58 @@
         
         .icon {
             font-size: 1.3em;
+        }
+        /* 推荐分类样式 */
+        
+        .recommendations-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .recommendation-category {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .category-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .category-badge {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: auto;
+        }
+        
+        .ready-badge {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+        
+        .need-one-badge {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+        
+        .empty-category {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-style: italic;
+            padding: 15px;
+            font-size: 0.9em;
         }
         
         .recommendation-item {
@@ -246,6 +297,29 @@
         .recommendation-item:hover {
             background: rgba(0, 255, 157, 0.2);
             transform: translateX(5px);
+        }
+        /* 更新推荐项样式 */
+        
+        .recommendation-item.ready {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+            animation: readyGlow 2s ease-in-out infinite alternate;
+        }
+        
+        .recommendation-item.need-one {
+            border-color: #ff9800;
+            background: rgba(255, 152, 0, 0.1);
+            animation: needOneGlow 2s ease-in-out infinite alternate;
+        }
+        
+        .recommendation-item.ready::after {
+            content: '🎉';
+            margin-left: 5px;
+        }
+        
+        .recommendation-item.need-one::after {
+            content: '🔥';
+            margin-left: 5px;
         }
         
         .recommendation-item.hot {
@@ -283,6 +357,41 @@
         .participant-count.full {
             background: linear-gradient(45deg, #ff6b6b, #ffa500);
             animation: pulse 1s infinite;
+        }
+        
+        .participant-count.almost-full {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            animation: almostFullPulse 1.5s infinite;
+        }
+        
+        @keyframes readyGlow {
+            from {
+                box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+            }
+        }
+        
+        @keyframes needOneGlow {
+            from {
+                box-shadow: 0 0 5px rgba(255, 152, 0, 0.3);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(255, 152, 0, 0.6);
+            }
+        }
+        
+        @keyframes almostFullPulse {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
         }
         
         @keyframes pulse {
@@ -397,16 +506,35 @@
         
         .modal-content {
             background: linear-gradient(135deg, #1a2332 0%, #2d4a3e 100%);
-            margin: 5% auto;
+            margin: 3% auto;
             padding: 30px;
             border-radius: 20px;
             width: 90%;
-            max-width: 600px;
+            max-width: 700px;
             border: 1px solid rgba(0, 255, 157, 0.3);
             animation: modalSlideIn 0.3s ease;
             position: relative;
-            max-height: 85vh;
+            max-height: 90vh;
             overflow-y: auto;
+        }
+        /* 自定义滚动条 */
+        
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        
+        .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 157, 0.3);
+            border-radius: 4px;
+        }
+        
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 157, 0.5);
         }
         
         @keyframes modalSlideIn {
@@ -447,7 +575,7 @@
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            color: #00b4ff;
+            color: #ffffff;
             font-weight: 500;
         }
         
@@ -469,8 +597,8 @@
         
         .time-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
             margin-bottom: 20px;
         }
         
@@ -480,14 +608,15 @@
         
         .time-label {
             display: block;
-            padding: 12px 8px;
+            padding: 15px 10px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(0, 255, 157, 0.2);
             border-radius: 10px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.9em;
+            font-size: 0.95em;
+            white-space: nowrap;
         }
         
         .time-label:hover {
@@ -624,7 +753,7 @@
                 font-size: 1.8em;
             }
             .time-grid {
-                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
                 gap: 8px;
             }
             .quick-actions {
@@ -635,9 +764,18 @@
                 padding: 6px 12px;
             }
             .modal-content {
-                margin: 10% auto;
+                margin: 5% auto;
                 padding: 20px;
                 width: 95%;
+            }
+            .recommendations-container {
+                gap: 15px;
+            }
+            .recommendation-category {
+                padding: 12px;
+            }
+            .category-title {
+                font-size: 1em;
             }
         }
         
@@ -877,10 +1015,22 @@
         let allAppointments = [];
         const groups = ['A', 'B', 'C'];
 
+        // 修改时间段为具体时间
         const timeSlots = [
-            '周一晚上', '周二晚上', '周三晚上', '周四晚上', '周五晚上',
-            '周六上午', '周六下午', '周六晚上',
-            '周日上午', '周日下午', '周日晚上'
+            // 工作日 周一到周五: 19:00-22:00, 22:00-23:59
+            '周一 19:00-22:00', '周一 22:00-23:59',
+            '周二 19:00-22:00', '周二 22:00-23:59',
+            '周三 19:00-22:00', '周三 22:00-23:59',
+            '周四 19:00-22:00', '周四 22:00-23:59',
+            '周五 19:00-22:00', '周五 22:00-23:59',
+
+            // 周六: 09:00-12:00, 14:00-17:00, 17:00-19:00, 19:00-22:00, 22:00-23:59
+            '周六 09:00-12:00', '周六 14:00-17:00', '周六 17:00-19:00',
+            '周六 19:00-22:00', '周六 22:00-23:59',
+
+            // 周日: 09:00-12:00, 14:00-17:00, 17:00-19:00, 19:00-22:00, 22:00-23:59
+            '周日 09:00-12:00', '周日 14:00-17:00', '周日 17:00-19:00',
+            '周日 19:00-22:00', '周日 22:00-23:59'
         ];
 
         // 离线存储管理
@@ -994,13 +1144,85 @@
             }, 500);
         }
 
-        // 生成单个组的卡片
+        // 获取推荐时间 - 优化算法，分成三缺一和已成局
+        function getRecommendations(appointments) {
+            const timeCount = {};
+
+            appointments.forEach(apt => {
+                apt.times.forEach(time => {
+                    if (!timeCount[time]) {
+                        timeCount[time] = {
+                            count: 0,
+                            participants: []
+                        };
+                    }
+                    timeCount[time].count++;
+                    timeCount[time].participants.push(apt.name);
+                });
+            });
+
+            // 分类处理
+            const allRecommendations = Object.entries(timeCount)
+                .map(([time, data]) => ({
+                    time,
+                    count: data.count,
+                    participants: data.participants
+                }))
+                .sort((a, b) => b.count - a.count);
+
+            // 分成两个类别
+            const readyToPlay = allRecommendations.filter(rec => rec.count >= 4); // 已成局 (4人及以上)
+            const needOneMore = allRecommendations.filter(rec => rec.count === 3); // 三缺一
+            const others = allRecommendations.filter(rec => rec.count < 3 && rec.count > 0); // 其他时间
+
+            return {
+                readyToPlay: readyToPlay.slice(0, 3), // 最多显示3个已成局
+                needOneMore: needOneMore.slice(0, 3), // 最多显示3个三缺一
+                others: others.slice(0, 3) // 最多显示3个其他时间
+            };
+        }
+
+        // 生成单个组的卡片 - 修改推荐显示部分
         function generateGroupCard(group) {
             const container = document.getElementById('singleGroupContainer');
 
             const groupAppointments = allAppointments.filter(apt => apt.group === group);
             const recommendations = getRecommendations(groupAppointments);
             const mySelections = getMySelections(group);
+
+            // 生成推荐时间HTML
+            function generateRecommendationHTML(recs, title, icon, emptyMsg, badgeClass = '') {
+                if (recs.length === 0) {
+                    return `
+                        <div class="recommendation-category">
+                            <div class="category-title">
+                                <span class="icon">${icon}</span>
+                                ${title}
+                            </div>
+                            <div class="empty-category">${emptyMsg}</div>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="recommendation-category">
+                        <div class="category-title">
+                            <span class="icon">${icon}</span>
+                            ${title}
+                            ${badgeClass ? `<span class="category-badge ${badgeClass}">${recs.length}</span>` : ''}
+                        </div>
+                        ${recs.map(rec => `
+                            <div class="recommendation-item ${rec.count >= 4 ? 'ready' : (rec.count === 3 ? 'need-one' : '')}">
+                                <div>
+                                    <div class="time-text">${rec.time}</div>
+                                    <div class="participants">${rec.participants.join(', ')}</div>
+                                </div>
+                                <div class="participant-count ${rec.count >= 4 ? 'full' : (rec.count === 3 ? 'almost-full' : '')}">${rec.count}人</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
 
             container.innerHTML = `
                 <div class="group-card">
@@ -1010,24 +1232,40 @@
                         <div class="section-title">
                             <span class="icon">🎯</span>
                             智能推荐时间
-                        </div>
-                        <div id="recommendations-${group}">
-                            ${recommendations.length > 0 ? 
-                                recommendations.map(rec => `
-                                    <div class="recommendation-item ${rec.count >= 4 ? 'hot' : ''}">
-                                        <div>
-                                            <div class="time-text">${rec.time}</div>
-                                            <div class="participants">${rec.participants.join(', ')}</div>
-                                        </div>
-                                        <div class="participant-count ${rec.count >= 4 ? 'full' : ''}">${rec.count}人</div>
-                                    </div>
-                                `).join('') :
-                                '<div class="empty-state">暂无推荐时间<br>快来约桌吧！</div>'
+                            ${(recommendations.readyToPlay.length > 0 || recommendations.needOneMore.length > 0) ? 
+                                '<span class="smart-recommendation">🔥 热门</span>' : ''
                             }
                         </div>
-                        ${recommendations.some(r => r.count >= 4) ? 
-                            '<div class="smart-recommendation">智能推荐</div>' : ''
-                        }
+                        
+                        <div class="recommendations-container">
+                            ${generateRecommendationHTML(
+                                recommendations.readyToPlay, 
+                                '🎉 已成局', 
+                                '✅', 
+                                '暂无成局时间',
+                                'ready-badge'
+                            )}
+                            
+                            ${generateRecommendationHTML(
+                                recommendations.needOneMore, 
+                                '🔥 三缺一', 
+                                '⏰', 
+                                '暂无三缺一时间',
+                                'need-one-badge'
+                            )}
+                            
+                            ${recommendations.others.length > 0 ? generateRecommendationHTML(
+                                recommendations.others, 
+                                '💡 其他时间', 
+                                '📋', 
+                                '',
+                                ''
+                            ) : ''}
+                            
+                            ${recommendations.readyToPlay.length === 0 && recommendations.needOneMore.length === 0 && recommendations.others.length === 0 ? 
+                                '<div class="empty-state">暂无推荐时间<br>快来约桌吧！</div>' : ''
+                            }
+                        </div>
                     </div>
 
                     <button class="action-button" onclick="openModal('${group}')">
@@ -1055,16 +1293,29 @@
             `;
         }
 
-        // 更新周信息
+        // 更新周信息 - 修改为每月第几周
         function updateWeekInfo() {
             const now = new Date();
             const month = now.getMonth() + 1;
-            const startOfYear = new Date(now.getFullYear(), 0, 1);
-            const pastDaysOfYear = (now - startOfYear) / 86400000;
-            const weekNumber = Math.ceil((pastDaysOfYear + startOfYear.getDay() + 1) / 7);
+            const year = now.getFullYear();
             
-            document.getElementById('weekInfo').textContent = `${month}月第${weekNumber}周`;
+            // 获取当月第一天
+            const firstDayOfMonth = new Date(year, now.getMonth(), 1);
+            
+            // 获取当月第一天是星期几 (0=周日, 1=周一, ..., 6=周六)
+            const firstDayWeekday = firstDayOfMonth.getDay();
+            
+            // 计算当前日期
+            const currentDate = now.getDate();
+            
+            // 计算当前是当月第几周
+            // 如果第一天不是周一，那么第一周可能不完整
+            const daysSinceFirstMonday = currentDate + firstDayWeekday - 1;
+            const weekOfMonth = Math.ceil(daysSinceFirstMonday / 7);
+            
+            document.getElementById('weekInfo').textContent = `${month}月第${weekOfMonth}周`;
         }
+
 
         // 检查每周重置
         async function checkWeeklyReset() {
@@ -1131,30 +1382,6 @@
                 
                 showNotification('数据库连接失败，使用本地数据', 'warning');
             }
-        }
-
-        // 获取推荐时间
-        function getRecommendations(appointments) {
-            const timeCount = {};
-            
-            appointments.forEach(apt => {
-                apt.times.forEach(time => {
-                    if (!timeCount[time]) {
-                        timeCount[time] = { count: 0, participants: [] };
-                    }
-                    timeCount[time].count++;
-                    timeCount[time].participants.push(apt.name);
-                });
-            });
-
-            return Object.entries(timeCount)
-                .map(([time, data]) => ({
-                    time,
-                    count: data.count,
-                    participants: data.participants
-                }))
-                .sort((a, b) => b.count - a.count)
-                .slice(0, 5);
         }
 
         // 获取我的选择
@@ -1249,7 +1476,7 @@
             });
         }
 
-        // 快捷选择
+        // 快捷选择 - 修改以适应新的时间段
         function quickSelect(type) {
             const checkboxes = document.querySelectorAll('.time-checkbox');
             
@@ -1262,7 +1489,7 @@
                         shouldCheck = time.includes('周六') || time.includes('周日');
                         break;
                     case 'weekday':
-                        shouldCheck = time.includes('晚上') && !time.includes('周六') && !time.includes('周日');
+                        shouldCheck = (time.includes('周一') || time.includes('周二') || time.includes('周三') || time.includes('周四') || time.includes('周五')) && time.includes('19:00-22:00');
                         break;
                     case 'all':
                         shouldCheck = true;
