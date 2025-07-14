@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TLG麻将约桌</title>
+    <title>TLG麻将约桌 - 科技版</title>
     <style>
         * {
             margin: 0;
@@ -28,11 +28,12 @@
             pointer-events: none;
             z-index: 1;
             animation: fall linear infinite;
+            opacity: 0.6;
         }
         
         @keyframes fall {
             0% {
-                transform: translateY(-100px) rotate(0deg);
+                transform: translateY(-100vh) rotate(0deg);
                 opacity: 0.8;
             }
             100% {
@@ -40,395 +41,518 @@
                 opacity: 0;
             }
         }
+        /* 磨砂玻璃效果 */
+        
+        .glass {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        /* 容器 */
         
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 30px 20px;
             position: relative;
-            z-index: 10;
+            z-index: 2;
         }
+        /* 标题区域 */
         
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             position: relative;
         }
         
-        .title {
+        .header::before {
+            content: '🀄';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 3em;
+            opacity: 0.3;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.1);
+            }
+        }
+        
+        .title {
+            font-size: 3.5em;
             font-weight: bold;
-            background: linear-gradient(45deg, #00ff9d, #00b4ff, #ff6b6b);
-            -webkit-background-clip: text;
+            background: linear-gradient(45deg, #00ff9d, #00b4ff, #ff6b9d);
             background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 255, 157, 0.5);
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(0, 255, 157, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                filter: drop-shadow(0 0 10px rgba(0, 255, 157, 0.3));
+            }
+            to {
+                filter: drop-shadow(0 0 20px rgba(0, 255, 157, 0.6));
+            }
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.7);
             margin-bottom: 10px;
-            animation: titleGlow 2s ease-in-out infinite alternate;
         }
         
         .week-info {
-            font-size: 1.2em;
+            font-size: 1.1em;
             color: #00ff9d;
-            opacity: 0.8;
+            font-weight: 600;
         }
-        
-        @keyframes titleGlow {
-            from {
-                text-shadow: 0 0 30px rgba(0, 255, 157, 0.5);
-            }
-            to {
-                text-shadow: 0 0 50px rgba(0, 255, 157, 0.8);
-            }
-        }
-        /* 组别选择器样式 */
+        /* 组别选择 */
         
         .group-selector {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 30px;
             margin-bottom: 40px;
             flex-wrap: wrap;
         }
         
-        .group-selector-btn {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+        .group-btn {
+            padding: 15px 40px;
             border: 2px solid rgba(0, 255, 157, 0.3);
-            border-radius: 20px;
-            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.05);
             color: #ffffff;
-            font-size: 1.2em;
-            font-weight: bold;
+            border-radius: 25px;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 120px;
-            justify-content: center;
+            font-size: 1.1em;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
         }
         
-        .group-selector-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            border-color: rgba(0, 255, 157, 0.8);
-            box-shadow: 0 15px 30px rgba(0, 255, 157, 0.3);
+        .group-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 157, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .group-btn:hover::before {
+            left: 100%;
+        }
+        
+        .group-btn:hover {
+            border-color: #00ff9d;
             background: rgba(0, 255, 157, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 255, 157, 0.2);
         }
         
-        .group-selector-btn.active {
+        .group-btn.active {
             background: linear-gradient(45deg, #00ff9d, #00b4ff);
+            border-color: #00ff9d;
             color: #000;
-            border-color: transparent;
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 15px 30px rgba(0, 255, 157, 0.4);
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 255, 157, 0.4);
         }
+        /* 主要内容区域 */
         
-        .group-selector-btn .icon {
-            font-size: 1.5em;
-        }
-        /* 返回按钮 */
-        
-        .back-button {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 15px;
-            padding: 10px 20px;
-            color: #ffffff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
+        .main-content {
             display: none;
-            align-items: center;
-            gap: 8px;
-            width: fit-content;
+            animation: fadeInUp 0.6s ease;
         }
         
-        .back-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateX(-5px);
-        }
-        
-        .back-button.show {
-            display: flex;
-        }
-        /* 单个组卡片容器 */
-        
-        .single-group-container {
-            display: none;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .single-group-container.show {
+        .main-content.active {
             display: block;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* 卡片网格 */
+        
+        .main-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
         }
         
         .group-card {
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             border: 1px solid rgba(0, 255, 157, 0.2);
-            border-radius: 20px;
-            padding: 40px;
-            min-height: auto;
-            max-height: none;
-            overflow: visible;
-            transition: all 0.3s ease;
+            border-radius: 25px;
+            padding: 35px;
+            min-height: 700px;
+            transition: all 0.4s ease;
             position: relative;
+            overflow: visible;
             transform-style: preserve-3d;
-        }
-        
-        .group-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: rgba(0, 255, 157, 0.5);
-            box-shadow: 0 20px 40px rgba(0, 255, 157, 0.2);
         }
         
         .group-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent, rgba(0, 255, 157, 0.1), transparent);
-            border-radius: 20px;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00ff9d, #00b4ff, #ff6b9d, #00ff9d);
+            border-radius: 25px;
+            z-index: -1;
             opacity: 0;
             transition: opacity 0.3s ease;
-            pointer-events: none;
         }
         
         .group-card:hover::before {
-            opacity: 1;
+            opacity: 0.3;
+            animation: borderGlow 2s linear infinite;
         }
         
-        .group-title {
-            font-size: 2.2em;
+        @keyframes borderGlow {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .group-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 25px 50px rgba(0, 255, 157, 0.2);
+            border-color: rgba(0, 255, 157, 0.5);
+        }
+        
+        .card-title {
+            font-size: 1.8em;
             font-weight: bold;
             color: #00ff9d;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             text-align: center;
-            text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+            position: relative;
         }
         
-        .recommendations-section {
+        .card-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(45deg, #00ff9d, #00b4ff);
+            border-radius: 2px;
+        }
+        /* 智能推荐样式 */
+        
+        .smart-recommendations {
             margin-bottom: 30px;
         }
         
-        .section-title {
-            font-size: 1.2em;
+        .recommendation-title {
+            font-size: 1.3em;
+            font-weight: 600;
             color: #ffffff;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
         
-        .icon {
-            font-size: 1.3em;
-        }
-        /* 推荐分类样式 */
-        
-        .recommendations-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
         .recommendation-category {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 15px;
-            padding: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 20px;
         }
         
         .category-title {
             font-size: 1.1em;
-            font-weight: bold;
-            color: #ffffff;
-            margin-bottom: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding: 8px 15px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+        
+        .full-table {
+            background: linear-gradient(45deg, #ff6b9d, #ff8a80);
+            color: #fff;
+        }
+        
+        .need-one {
+            background: linear-gradient(45deg, #ffd54f, #ffb74d);
+            color: #000;
+        }
+        
+        .recommendation-list {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 8px;
-        }
-        
-        .category-badge {
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.8em;
-            font-weight: bold;
-            margin-left: auto;
-        }
-        
-        .ready-badge {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-            color: white;
-            animation: pulse 2s infinite;
-        }
-        
-        .need-one-badge {
-            background: linear-gradient(45deg, #ff9800, #f57c00);
-            color: white;
-            animation: pulse 2s infinite;
-        }
-        
-        .empty-category {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.4);
-            font-style: italic;
-            padding: 15px;
-            font-size: 0.9em;
         }
         
         .recommendation-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            background: rgba(0, 255, 157, 0.1);
-            border: 1px solid rgba(0, 255, 157, 0.2);
-            border-radius: 15px;
-            margin-bottom: 12px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 157, 0.1);
+            border-radius: 12px;
             transition: all 0.3s ease;
-            animation: slideInLeft 0.5s ease;
         }
         
         .recommendation-item:hover {
-            background: rgba(0, 255, 157, 0.2);
+            background: rgba(0, 255, 157, 0.1);
+            border-color: rgba(0, 255, 157, 0.3);
             transform: translateX(5px);
         }
-        /* 更新推荐项样式 */
         
-        .recommendation-item.ready {
-            border-color: #4CAF50;
-            background: rgba(76, 175, 80, 0.1);
-            animation: readyGlow 2s ease-in-out infinite alternate;
+        .time-info {
+            font-weight: 600;
+            color: #fff;
         }
         
-        .recommendation-item.need-one {
-            border-color: #ff9800;
-            background: rgba(255, 152, 0, 0.1);
-            animation: needOneGlow 2s ease-in-out infinite alternate;
+        .participant-info {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.7);
         }
         
-        .recommendation-item.ready::after {
-            content: '🎉';
-            margin-left: 5px;
+        .no-recommendations {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.6);
         }
         
-        .recommendation-item.need-one::after {
-            content: '🔥';
-            margin-left: 5px;
+        .no-recommendations .emoji {
+            font-size: 2em;
+            margin-bottom: 10px;
+            display: block;
+            font-style: normal;
         }
         
-        .recommendation-item.hot {
-            border-color: #ff6b6b;
-            background: rgba(255, 107, 107, 0.1);
+        .no-recommendations .text {
+            font-style: italic;
+        }
+        /* 时间轴样式 */
+        
+        .time-selection {
+            margin-bottom: 30px;
         }
         
-        .recommendation-item.hot::after {
-            content: '🔥';
-            margin-left: 5px;
+        .section-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .timeline-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+        }
+        
+        .day-section {
+            margin-bottom: 25px;
+        }
+        
+        .day-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #00ff9d;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid rgba(0, 255, 157, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .day-title:hover {
+            color: #ffffff;
+            background: rgba(0, 255, 157, 0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+        
+        .day-title.collapsible::after {
+            content: '▼';
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+        
+        .day-title.collapsed::after {
+            transform: rotate(-90deg);
+        }
+        
+        .weekday-section {
+            margin-bottom: 20px;
+        }
+        
+        .weekday-section.collapsed .time-slots {
+            display: none;
+        }
+        
+        .weekdays-container {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .weekdays-header {
+            padding: 15px 20px;
+            background: rgba(0, 255, 157, 0.1);
+            border-bottom: 1px solid rgba(0, 255, 157, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .weekdays-header:hover {
+            background: rgba(0, 255, 157, 0.15);
+        }
+        
+        .weekdays-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #00ff9d;
+        }
+        
+        .weekdays-toggle {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.7);
+            transition: transform 0.3s ease;
+        }
+        
+        .weekdays-container.collapsed .weekdays-toggle {
+            transform: rotate(-90deg);
+        }
+        
+        .weekdays-content {
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .weekdays-container.collapsed .weekdays-content {
+            display: none;
+        }
+        
+        .time-slots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .time-slot {
+            position: relative;
+            flex: 1;
+            min-width: 120px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 255, 157, 0.2);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .time-slot::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(45deg, #00ff9d, #00b4ff);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+        
+        .time-slot.selected::before {
+            opacity: 0.8;
+        }
+        
+        .time-slot-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            pointer-events: none;
         }
         
         .time-text {
-            font-weight: 500;
-            font-size: 1.1em;
-        }
-        
-        .participants {
-            font-size: 1em;
-            color: #aaa;
-            margin-top: 5px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 2px;
+            transition: color 0.3s ease;
         }
         
         .participant-count {
-            background: linear-gradient(45deg, #00ff9d, #00b4ff);
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 0.9em;
-            font-weight: bold;
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.7);
+            transition: color 0.3s ease;
+        }
+        
+        .time-slot:hover {
+            border-color: rgba(0, 255, 157, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 157, 0.2);
+        }
+        
+        .time-slot.selected {
+            border-color: #00ff9d;
+            box-shadow: 0 8px 25px rgba(0, 255, 157, 0.4);
+        }
+        
+        .time-slot.selected .time-text,
+        .time-slot.selected .participant-count {
             color: #000;
-            min-width: 35px;
-            text-align: center;
+            font-weight: 700;
         }
+        /* 快捷选择按钮 */
         
-        .participant-count.full {
-            background: linear-gradient(45deg, #ff6b6b, #ffa500);
-            animation: pulse 1s infinite;
-        }
-        
-        .participant-count.almost-full {
-            background: linear-gradient(45deg, #ff9800, #f57c00);
-            animation: almostFullPulse 1.5s infinite;
-        }
-        
-        @keyframes readyGlow {
-            from {
-                box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
-            }
-            to {
-                box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
-            }
-        }
-        
-        @keyframes needOneGlow {
-            from {
-                box-shadow: 0 0 5px rgba(255, 152, 0, 0.3);
-            }
-            to {
-                box-shadow: 0 0 20px rgba(255, 152, 0, 0.6);
-            }
-        }
-        
-        @keyframes almostFullPulse {
-            0%,
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.1);
-                opacity: 0.8;
-            }
-        }
-        
-        @keyframes pulse {
-            0%,
-            100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-        }
-        
-        .action-button {
-            background: linear-gradient(45deg, #00ff9d, #00b4ff);
-            color: #000;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-bottom: 20px;
-            font-size: 1.1em;
-            transform: perspective(1000px) rotateX(0deg);
-        }
-        
-        .action-button:hover {
-            transform: perspective(1000px) rotateX(-5deg) translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 255, 157, 0.3);
-        }
-        
-        .action-button:active {
-            transform: perspective(1000px) rotateX(5deg) translateY(1px);
-        }
-        
-        .quick-actions {
+        .quick-select {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
@@ -436,421 +560,193 @@
         }
         
         .quick-btn {
-            background: rgba(0, 180, 255, 0.2);
-            border: 1px solid rgba(0, 180, 255, 0.3);
-            color: #00b4ff;
-            padding: 8px 15px;
-            border-radius: 15px;
-            font-size: 0.9em;
+            padding: 8px 16px;
+            background: rgba(0, 255, 157, 0.1);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 20px;
+            color: #00ff9d;
             cursor: pointer;
             transition: all 0.3s ease;
-            white-space: nowrap;
+            font-size: 0.9em;
+            font-weight: 500;
         }
         
         .quick-btn:hover {
-            background: rgba(0, 180, 255, 0.3);
-            transform: scale(1.05);
+            background: rgba(0, 255, 157, 0.2);
+            transform: translateY(-1px);
         }
+        /* 我的选择样式 */
         
         .my-selections {
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .my-selections-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
         
         .selection-count {
-            color: #00ff9d;
-            font-size: 1em;
-            margin-bottom: 15px;
-            text-align: center;
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 400;
         }
         
-        .my-selection-item {
+        .selections-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+            min-height: 100px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .selection-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            margin-bottom: 10px;
-            animation: slideInRight 0.3s ease;
-        }
-        
-        .delete-btn {
-            background: rgba(255, 107, 107, 0.2);
-            border: 1px solid rgba(255, 107, 107, 0.3);
-            color: #ff6b6b;
-            padding: 6px 12px;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 157, 0.2);
             border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.9em;
+            margin-bottom: 8px;
             transition: all 0.3s ease;
         }
         
+        .selection-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(0, 255, 157, 0.4);
+        }
+        
+        .selection-time {
+            color: #ffffff;
+            font-weight: 500;
+        }
+        
+        .delete-btn {
+            background: rgba(255, 107, 157, 0.2);
+            border: 1px solid rgba(255, 107, 157, 0.4);
+            color: #ff6b9d;
+            border-radius: 6px;
+            padding: 4px 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8em;
+        }
+        
         .delete-btn:hover {
-            background: rgba(255, 107, 107, 0.4);
+            background: rgba(255, 107, 157, 0.4);
             transform: scale(1.1);
         }
         
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, #1a2332 0%, #2d4a3e 100%);
-            margin: 3% auto;
-            padding: 30px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 700px;
-            border: 1px solid rgba(0, 255, 157, 0.3);
-            animation: modalSlideIn 0.3s ease;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        /* 自定义滚动条 */
-        
-        .modal-content::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .modal-content::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-        
-        .modal-content::-webkit-scrollbar-thumb {
-            background: rgba(0, 255, 157, 0.3);
-            border-radius: 4px;
-        }
-        
-        .modal-content::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 255, 157, 0.5);
-        }
-        
-        @keyframes modalSlideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-        
-        .close:hover {
-            color: #ff6b6b;
-        }
-        
-        .modal-title {
-            color: #00ff9d;
-            font-size: 1.5em;
-            margin-bottom: 20px;
+        .no-selections {
             text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+            padding: 20px;
+        }
+        /* 表单样式 */
+        
+        .form-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(0, 255, 157, 0.1);
         }
         
         .form-group {
             margin-bottom: 20px;
         }
         
-        .form-group label {
+        .form-label {
             display: block;
             margin-bottom: 8px;
             color: #ffffff;
-            font-weight: 500;
+            font-weight: 600;
         }
         
-        .form-group input {
+        .form-input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid rgba(0, 255, 157, 0.3);
-            border-radius: 10px;
+            padding: 12px 16px;
             background: rgba(255, 255, 255, 0.05);
-            color: #fff;
+            border: 2px solid rgba(0, 255, 157, 0.2);
+            border-radius: 10px;
+            color: #ffffff;
             font-size: 1em;
+            transition: all 0.3s ease;
         }
         
-        .form-group input:focus {
+        .form-input:focus {
             outline: none;
             border-color: #00ff9d;
-            box-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.2);
         }
         
-        .time-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .time-checkbox {
-            display: none;
-        }
-        
-        .time-label {
-            display: block;
-            padding: 15px 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 255, 157, 0.2);
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.95em;
-            white-space: nowrap;
-        }
-        
-        .time-label:hover {
-            background: rgba(0, 255, 157, 0.1);
-            border-color: rgba(0, 255, 157, 0.5);
-        }
-        
-        .time-checkbox:checked+.time-label {
-            background: linear-gradient(45deg, #00ff9d, #00b4ff);
-            color: #000;
-            font-weight: bold;
-            border-color: transparent;
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 255, 157, 0.4);
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
         
         .submit-btn {
-            background: linear-gradient(45deg, #00ff9d, #00b4ff);
-            color: #000;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
             width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #00ff9d, #00b4ff);
+            border: none;
+            border-radius: 12px;
+            color: #000;
             font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
             transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 255, 157, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 255, 157, 0.4);
         }
         
         .submit-btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(45deg, #00ff9d, #00b4ff);
-            color: #000;
-            padding: 15px 20px;
-            border-radius: 10px;
-            font-weight: bold;
-            z-index: 2000;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0, 255, 157, 0.3);
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        .notification.error {
-            background: linear-gradient(45deg, #ff6b6b, #ffa500);
-        }
-        
-        .notification.warning {
-            background: linear-gradient(45deg, #ffa500, #ffeb3b);
-        }
-        
-        .smart-recommendation {
-            background: linear-gradient(45deg, #ff6b6b, #ffa500);
-            color: #fff;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.7em;
-            font-weight: bold;
-            margin-left: 8px;
-            animation: glow 2s infinite;
-        }
-        
-        @keyframes glow {
-            0%,
-            100% {
-                box-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
-            }
-            50% {
-                box-shadow: 0 0 20px rgba(255, 107, 107, 0.8);
-            }
-        }
-        /* 连接状态指示器 */
-        
-        .connection-status {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            z-index: 1000;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .connection-status.online {
-            border-color: rgba(0, 255, 157, 0.5);
-            color: #00ff9d;
-        }
-        
-        .connection-status.offline {
-            border-color: rgba(255, 107, 107, 0.5);
-            color: #ff6b6b;
-        }
-        /* 移动端优化 */
+        /* 响应式设计 */
         
         @media (max-width: 768px) {
-            .container {
-                padding: 15px;
+            .main-menu {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .group-card {
+                padding: 20px;
+                min-height: auto;
+            }
+            .title {
+                font-size: 2.5em;
             }
             .group-selector {
                 gap: 15px;
             }
-            .group-selector-btn {
-                padding: 12px 20px;
-                font-size: 1em;
-                min-width: 100px;
-            }
-            .single-group-container {
-                max-width: 100%;
-            }
-            .group-card {
-                padding: 25px;
-            }
-            .title {
-                font-size: 2em;
-            }
-            .group-title {
-                font-size: 1.8em;
-            }
-            .time-grid {
-                grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-                gap: 8px;
-            }
-            .quick-actions {
-                gap: 8px;
-            }
-            .quick-btn {
-                font-size: 0.8em;
-                padding: 6px 12px;
-            }
-            .modal-content {
-                margin: 5% auto;
-                padding: 20px;
-                width: 95%;
-            }
-            .recommendations-container {
-                gap: 15px;
-            }
-            .recommendation-category {
-                padding: 12px;
-            }
-            .category-title {
+            .group-btn {
+                padding: 12px 25px;
                 font-size: 1em;
             }
-        }
-        
-        @keyframes slideInLeft {
-            from {
-                transform: translateX(-30px);
-                opacity: 0;
+            .time-slots {
+                flex-direction: column;
             }
-            to {
-                transform: translateX(0);
-                opacity: 1;
+            .time-slot {
+                min-width: 100%;
             }
         }
-        
-        @keyframes slideInRight {
-            from {
-                transform: translateX(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        
-        @keyframes numberCount {
-            from {
-                transform: scale(1.5);
-                opacity: 0.5;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-        
-        .count-animation {
-            animation: numberCount 0.3s ease;
-        }
-        
-        .conflict-warning {
-            background: rgba(255, 107, 107, 0.2);
-            border: 1px solid rgba(255, 107, 107, 0.5);
-            border-radius: 10px;
-            padding: 10px;
-            margin: 10px 0;
-            color: #ff6b6b;
-            font-size: 0.9em;
-            animation: shake 0.5s ease;
-        }
-        
-        @keyframes shake {
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-            25% {
-                transform: translateX(-5px);
-            }
-            75% {
-                transform: translateX(5px);
-            }
-        }
-        
-        .conflict-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 5px 0;
-            border-bottom: 1px solid rgba(255, 107, 107, 0.2);
-        }
-        
-        .conflict-item:last-child {
-            border-bottom: none;
-        }
+        /* 加载动画 */
         
         .loading {
             display: inline-block;
@@ -867,281 +763,574 @@
                 transform: rotate(360deg);
             }
         }
+        /* 通知样式 */
         
-        .empty-state {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.5);
-            padding: 30px;
-            font-style: italic;
-            font-size: 1.1em;
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: rgba(0, 255, 157, 0.9);
+            color: #000;
+            border-radius: 10px;
+            font-weight: 600;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
         }
         
-        .empty-state::before {
-            content: '🤷‍♀️';
-            display: block;
-            font-size: 3em;
-            margin-bottom: 15px;
-        }
-        /* 页面切换动画 */
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease;
+        .notification.show {
+            transform: translateX(0);
         }
         
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .notification.error {
+            background: rgba(255, 107, 157, 0.9);
+            color: #fff;
+        }
+        /* 滚动条样式 */
+        
+         ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+         ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        
+         ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 157, 0.5);
+            border-radius: 4px;
+        }
+        
+         ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 157, 0.7);
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
-    <!-- 连接状态指示器 -->
-    <div id="connectionStatus" class="connection-status offline">
-        🔴 离线模式
-    </div>
+    <!-- 麻将牌飘落背景 -->
+    <div id="mahjongParticles"></div>
 
-    <!-- 麻将牌飘落效果 -->
-    <div id="particles"></div>
-
-    <div class="container">
-        <div class="header">
-            <h1 class="title">本周麻将约桌</h1>
-            <div class="week-info" id="weekInfo">加载中...</div>
-        </div>
-
-        <!-- 返回按钮 -->
-        <button class="back-button" id="backButton" onclick="showGroupSelector()">
-            ← 返回选择组别
-        </button>
-
-        <!-- 组别选择器 -->
-        <div class="group-selector" id="groupSelector">
-            <button class="group-selector-btn" onclick="selectGroup('A')">
-                <span class="icon">🀄</span>
-                <span>组 A</span>
-            </button>
-            <button class="group-selector-btn" onclick="selectGroup('B')">
-                <span class="icon">🀅</span>
-                <span>组 B</span>
-            </button>
-            <button class="group-selector-btn" onclick="selectGroup('C')">
-                <span class="icon">🀆</span>
-                <span>组 C</span>
-            </button>
-        </div>
-
-        <!-- 单个组的详细视图 -->
-        <div class="single-group-container" id="singleGroupContainer">
-            <!-- 动态生成单个组的卡片 -->
-        </div>
-    </div>
-
-    <!-- 约桌模态框 -->
-    <div id="appointmentModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 class="modal-title">我要约桌</h2>
-
-            <div class="form-group">
-                <label for="userName">昵称:</label>
-                <input type="text" id="userName" placeholder="请输入你的昵称" required>
-            </div>
-
-            <div class="form-group">
-                <label>选择你有空的时间:</label>
-
-                <!-- 快捷选择按钮 -->
-                <div class="quick-actions">
-                    <button class="quick-btn" onclick="quickSelect('weekend')">周末</button>
-                    <button class="quick-btn" onclick="quickSelect('weekday')">工作日晚上</button>
-                    <button class="quick-btn" onclick="quickSelect('all')">全选</button>
-                    <button class="quick-btn" onclick="quickSelect('clear')">清空</button>
-                </div>
-
-                <!-- 实时统计 -->
-                <div class="selection-count" id="selectionCount">已选择 0 个时间段</div>
-
-                <!-- 冲突检测 -->
-                <div id="conflictWarning" class="conflict-warning" style="display: none;"></div>
-
-                <div class="time-grid" id="timeGrid">
-                    <!-- 动态生成时间选项 -->
-                </div>
-            </div>
-
-            <button class="submit-btn" id="submitBtn" onclick="submitAppointment()">
-                <span id="submitText">提交约桌</span>
-                <div id="submitLoading" class="loading" style="display: none;"></div>
-            </button>
-        </div>
-    </div>
-
-    <!-- 通知组件 -->
+    <!-- 通知容器 -->
     <div id="notification" class="notification"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1 class="title">TLG 麻将约桌</h1>
+            <p class="subtitle">S5 最高位赛事</p>
+            <div class="week-info" id="weekInfo">7月第1周</div>
+        </div>
+
+        <!-- 组别选择 -->
+        <div class="group-selector">
+            <button class="group-btn" data-group="A">🀄 组A</button>
+            <button class="group-btn" data-group="B">🀅 组B</button>
+            <button class="group-btn" data-group="C">🀆 组C</button>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="main-content" id="mainContent">
+            <div class="main-menu">
+                <!-- 智能推荐卡片 -->
+                <div class="group-card">
+                    <h3 class="card-title">🤖 智能推荐时间</h3>
+                    <div class="smart-recommendations" id="recommendations">
+                        <div class="no-recommendations">
+                            <span class="emoji">🎯</span>
+                            <span class="text">暂无推荐时间，快来约桌吧！</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 我要约桌卡片 -->
+                <div class="group-card">
+                    <h3 class="card-title">🎲 我要约桌</h3>
+
+                    <!-- 快捷选择 -->
+                    <div class="quick-select">
+                        <button class="quick-btn" onclick="quickSelect('weekend')">选择周末</button>
+                        <button class="quick-btn" onclick="quickSelect('weeknight')">选择工作日晚上</button>
+                        <button class="quick-btn" onclick="quickSelect('clear')">清空选择</button>
+                    </div>
+
+                    <!-- 时间选择 -->
+                    <div class="time-selection">
+                        <div class="section-title">
+                            <span>⏰ 选择时间</span>
+                            <span class="selection-count" id="selectionCounter">已选择 0 个时间段</span>
+                        </div>
+                        <div class="timeline-container" id="timelineContainer">
+                            <!-- 工作日容器 (可折叠) -->
+                            <div class="weekdays-container collapsed" id="weekdaysContainer">
+                                <div class="weekdays-header" onclick="toggleWeekdays()">
+                                    <div class="weekdays-title">📅 工作日 (周一至周五)</div>
+                                    <div class="weekdays-toggle">▶</div>
+                                </div>
+                                <div class="weekdays-content">
+                                    <!-- 周一 -->
+                                    <div class="day-section">
+                                        <div class="day-title">周一</div>
+                                        <div class="time-slots">
+                                            <div class="time-slot" data-time="周一 19:00-22:00">
+                                                <div class="time-slot-content">
+                                                    <div class="time-text">19:00-22:00</div>
+                                                    <div class="participant-count">0人选择</div>
+                                                </div>
+                                            </div>
+                                            <div class="time-slot" data-time="周一 22:00-23:59">
+                                                <div class="time-slot-content">
+                                                    <div class="time-text">22:00-23:59</div>
+                                                    <div class="participant-count">0人选择</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 周二 -->
+                                    <div class="day-section">
+                                        <div class="day-title">周二</div>
+                                        <div class="time-slots">
+                                            <div class="time-slot" data-time="周二 19:00-22:00">
+                                                <div class="time-slot-content">
+                                                    <div class="time-text">19:00-22:00</div>
+                                                    <div class="participant-count">0人选择</div>
+                                                </div>
+                                            </div>
+                                            <div class="time-slot" data-time="周二 22:00-23:59">
+                                                <div class="time-slot-content">
+                                                    <div class="time-text">22:00-23:59</div>
+                                                    <div class="participant-count">0人选择</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 周三 -->
+                                    <div class="day-section">
+                                        <div class="day-title">周三</div>
+                                        <div class="time-slots">
+                                            <div class="time-slot" data-time="周三 19:00-22:00">
+                                                <div class="time-slot-content">
+                                                    <div class="time-text">19:00-22:00</div>
+                                                    <div class="participant-count">0人选择</div>
+                                                </div>
+                                            </div>
+                                            <div class="time-slot" data-time="周三 22:00-23:59">
+                                                <div class="time-slot-content">
+                                                    <div class="time-text">22:00-23:59</div>
+                                                    <div class="participant-count">0人选择</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 周四 -->
+                                    <div class="day-section">
+                                        <div class="day-title">周四</div>
+                                        <div class="time-slots">
+                                            <div class="time-slot" data-time="周四 19:00-22:00">
+                                                <div class="time-slot-content">
+                                                    <div class="time-text">19:00-22:00</div>
+                                                    <div class="participant-count">0人选择</div>
+                                                </div>
+                                            </div>
+                                            <div class="time-slot" data-time="周四 22:00-23:59">
+                                                <div class="time-slot-content">
+                                                    <div class="time-text">22:00-23:59</div>
+                                                    <div class="participant-count">0人选择</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 周五 -->
+                                    <div class="day-section">
+                                        <div class="day-title">周五</div>
+                                        <div class="time-slots">
+                                            <div class="time-slot" data-time="周五 19:00-22:00">
+                                                <div class="time-slot-content">
+                                                    <div class="time-text">19:00-22:00</div>
+                                                    <div class="participant-count">0人选择</div>
+                                                </div>
+                                            </div>
+                                            <div class="time-slot" data-time="周五 22:00-23:59">
+                                                <div class="time-slot-content">
+                                                    <div class="time-text">22:00-23:59</div>
+                                                    <div class="participant-count">0人选择</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 周六 -->
+                            <div class="day-section">
+                                <div class="day-title">周六</div>
+                                <div class="time-slots">
+                                    <div class="time-slot" data-time="周六 09:00-12:00">
+                                        <div class="time-slot-content">
+                                            <div class="time-text">09:00-12:00</div>
+                                            <div class="participant-count">0人选择</div>
+                                        </div>
+                                    </div>
+                                    <div class="time-slot" data-time="周六 14:00-17:00">
+                                        <div class="time-slot-content">
+                                            <div class="time-text">14:00-17:00</div>
+                                            <div class="participant-count">0人选择</div>
+                                        </div>
+                                    </div>
+                                    <div class="time-slot" data-time="周六 17:00-19:00">
+                                        <div class="time-slot-content">
+                                            <div class="time-text">17:00-19:00</div>
+                                            <div class="participant-count">0人选择</div>
+                                        </div>
+                                    </div>
+                                    <div class="time-slot" data-time="周六 19:00-22:00">
+                                        <div class="time-slot-content">
+                                            <div class="time-text">19:00-22:00</div>
+                                            <div class="participant-count">0人选择</div>
+                                        </div>
+                                    </div>
+                                    <div class="time-slot" data-time="周六 22:00-23:59">
+                                        <div class="time-slot-content">
+                                            <div class="time-text">22:00-23:59</div>
+                                            <div class="participant-count">0人选择</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 周日 -->
+                            <div class="day-section">
+                                <div class="day-title">周日</div>
+                                <div class="time-slots">
+                                    <div class="time-slot" data-time="周日 09:00-12:00">
+                                        <div class="time-slot-content">
+                                            <div class="time-text">09:00-12:00</div>
+                                            <div class="participant-count">0人选择</div>
+                                        </div>
+                                    </div>
+                                    <div class="time-slot" data-time="周日 14:00-17:00">
+                                        <div class="time-slot-content">
+                                            <div class="time-text">14:00-17:00</div>
+                                            <div class="participant-count">0人选择</div>
+                                        </div>
+                                    </div>
+                                    <div class="time-slot" data-time="周日 17:00-19:00">
+                                        <div class="time-slot-content">
+                                            <div class="time-text">17:00-19:00</div>
+                                            <div class="participant-count">0人选择</div>
+                                        </div>
+                                    </div>
+                                    <div class="time-slot" data-time="周日 19:00-22:00">
+                                        <div class="time-slot-content">
+                                            <div class="time-text">19:00-22:00</div>
+                                            <div class="participant-count">0人选择</div>
+                                        </div>
+                                    </div>
+                                    <div class="time-slot" data-time="周日 22:00-23:59">
+                                        <div class="time-slot-content">
+                                            <div class="time-text">22:00-23:59</div>
+                                            <div class="participant-count">0人选择</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 我的选择 -->
+                    <div class="my-selections">
+                        <div class="my-selections-title">
+                            <span>📝 我的选择</span>
+                            <span class="selection-count" id="mySelectionCount">(0 个)</span>
+                        </div>
+                        <div class="selections-container" id="mySelections">
+                            <div class="no-selections">还没有选择任何时间</div>
+                        </div>
+                    </div>
+
+                    <!-- 提交表单 -->
+                    <div class="form-section">
+                        <form id="appointmentForm">
+                            <div class="form-group">
+                                <label class="form-label" for="userName">昵称</label>
+                                <input type="text" id="userName" class="form-input" placeholder="请输入您的昵称" required>
+                            </div>
+                            <button type="submit" class="submit-btn" id="submitBtn">
+                                🚀 提交约桌申请
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 正确的 Supabase 配置方式
+        // Supabase配置 - 修正连接信息
         const supabaseUrl = 'https://eflqdtfemuucefbfghax.supabase.co';
         const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmbHFkdGZlbXV1Y2VmYmZnaGF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI0NjE5OTgsImV4cCI6MjA2ODAzNzk5OH0.kRJa-KH5PbAPxZwFer-PbbNSg0QaJ1P2u9HomlEmoJc';
-
-        // 使用正确的方式创建 Supabase 客户端
         const {
             createClient
         } = supabase;
-        let supabaseClient;
-        let isOnline = false;
-
-        // 尝试初始化 Supabase
-        try {
-            supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
-            console.log('Supabase 客户端初始化成功');
-        } catch (error) {
-            console.error('Supabase 初始化失败:', error);
-            supabaseClient = null;
-        }
+        const supabaseClient = createClient(supabaseUrl, supabaseAnonKey);
 
         // 全局变量
         let currentGroup = '';
-        let selectedGroup = '';
         let selectedTimes = new Set();
-        let allAppointments = [];
-        const groups = ['A', 'B', 'C'];
+        let appointments = [];
+        let timeCounts = {};
 
-        // 修改时间段为具体时间
-        const timeSlots = [
-            // 工作日 周一到周五: 19:00-22:00, 22:00-23:59
-            '周一 19:00-22:00', '周一 22:00-23:59',
-            '周二 19:00-22:00', '周二 22:00-23:59',
-            '周三 19:00-22:00', '周三 22:00-23:59',
-            '周四 19:00-22:00', '周四 22:00-23:59',
-            '周五 19:00-22:00', '周五 22:00-23:59',
-
-            // 周六: 09:00-12:00, 14:00-17:00, 17:00-19:00, 19:00-22:00, 22:00-23:59
-            '周六 09:00-12:00', '周六 14:00-17:00', '周六 17:00-19:00',
-            '周六 19:00-22:00', '周六 22:00-23:59',
-
-            // 周日: 09:00-12:00, 14:00-17:00, 17:00-19:00, 19:00-22:00, 22:00-23:59
-            '周日 09:00-12:00', '周日 14:00-17:00', '周日 17:00-19:00',
-            '周日 19:00-22:00', '周日 22:00-23:59'
-        ];
-
-        // 离线存储管理
-        const STORAGE_KEY = 'mahjong_appointments';
-        const USER_KEY = 'mahjong_user_selections';
-
-        // 页面加载
+        // 页面初始化
         document.addEventListener('DOMContentLoaded', function() {
-            initializePage();
+            updateWeekInfo();
+            createMahjongParticles();
+            setupEventListeners();
             loadUserPreferences();
-            createParticleEffect();
-            setupModalEvents();
-            checkConnection();
         });
 
-        // 检查网络连接
-        async function checkConnection() {
-            const statusElement = document.getElementById('connectionStatus');
+        // 更新周信息 - 修改为每月第几周
+        function updateWeekInfo() {
+            const now = new Date();
+            const month = now.getMonth() + 1;
+            const year = now.getFullYear();
 
-            if (!supabaseClient) {
-                updateConnectionStatus(false);
-                return;
+            // 获取当月第一天
+            const firstDayOfMonth = new Date(year, now.getMonth(), 1);
+
+            // 获取当月第一天是星期几 (0=周日, 1=周一, ..., 6=周六)
+            const firstDayWeekday = firstDayOfMonth.getDay();
+
+            // 计算当前日期
+            const currentDate = now.getDate();
+
+            // 计算当前是当月第几周
+            // 如果第一天不是周一，那么第一周可能不完整
+            const daysSinceFirstMonday = currentDate + firstDayWeekday - 1;
+            const weekOfMonth = Math.ceil(daysSinceFirstMonday / 7);
+
+            document.getElementById('weekInfo').textContent = `${month} 月第 ${weekOfMonth} 周`;
+        }
+
+        // 创建麻将牌飘落效果
+        function createMahjongParticles() {
+            const particles = ['🀄', '🀅', '🀆', '🀇', '🀈', '🀉', '🀊', '🀋', '🀌', '🀍', '🀎', '🀏'];
+            const container = document.getElementById('mahjongParticles');
+
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'mahjong-particle';
+                particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+
+                container.appendChild(particle);
+
+                setTimeout(() => {
+                    particle.remove();
+                }, 5000);
             }
 
+            // 每2秒创建一个粒子
+            setInterval(createParticle, 2000);
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 组别选择
+            document.querySelectorAll('.group-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    selectGroup(this.dataset.group);
+                });
+            });
+
+            // 时间选择
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.addEventListener('click', function() {
+                    toggleTimeSelection(this.dataset.time, this);
+                });
+            });
+
+            // 表单提交
+            document.getElementById('appointmentForm').addEventListener('submit', handleSubmit);
+        }
+
+        // 选择组别
+        function selectGroup(group) {
+            currentGroup = group;
+
+            // 更新按钮状态
+            document.querySelectorAll('.group-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-group="${group}"]`).classList.add('active');
+
+            // 显示主要内容
+            document.getElementById('mainContent').classList.add('active');
+
+            // 重置选择状态
+            selectedTimes.clear();
+            updateSelectionDisplay();
+
+            // 加载数据
+            loadAppointments();
+
+            showNotification(`已切换到组${group}`, 'success');
+        }
+
+        // 切换时间选择
+        function toggleTimeSelection(time, element) {
+            if (selectedTimes.has(time)) {
+                selectedTimes.delete(time);
+                element.classList.remove('selected');
+            } else {
+                selectedTimes.add(time);
+                element.classList.add('selected');
+            }
+            updateSelectionDisplay();
+            updateSelectionCounter();
+        }
+
+        // 快捷选择
+        function quickSelect(type) {
+            const weekendTimes = [
+                '周六 09:00-12:00', '周六 14:00-17:00', '周六 17:00-19:00',
+                '周六 19:00-22:00', '周六 22:00-23:59',
+                '周日 09:00-12:00', '周日 14:00-17:00', '周日 17:00-19:00',
+                '周日 19:00-22:00', '周日 22:00-23:59'
+            ];
+            const weeknightTimes = [
+                '周一 19:00-22:00', '周一 22:00-23:59',
+                '周二 19:00-22:00', '周二 22:00-23:59',
+                '周三 19:00-22:00', '周三 22:00-23:59',
+                '周四 19:00-22:00', '周四 22:00-23:59',
+                '周五 19:00-22:00', '周五 22:00-23:59'
+            ];
+
+            if (type === 'clear') {
+                selectedTimes.clear();
+                document.querySelectorAll('.time-slot').forEach(slot => {
+                    slot.classList.remove('selected');
+                });
+            } else if (type === 'weekend') {
+                weekendTimes.forEach(time => {
+                    selectedTimes.add(time);
+                    const element = document.querySelector(`[data-time="${time}"]`);
+                    if (element) element.classList.add('selected');
+                });
+            } else if (type === 'weeknight') {
+                weeknightTimes.forEach(time => {
+                    selectedTimes.add(time);
+                    const element = document.querySelector(`[data-time="${time}"]`);
+                    if (element) element.classList.add('selected');
+                });
+            }
+
+            updateSelectionDisplay();
+            updateSelectionCounter();
+
+            // 添加触觉反馈
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }
+
+        // 更新选择显示
+        function updateSelectionDisplay() {
+            const container = document.getElementById('mySelections');
+            const countElement = document.getElementById('mySelectionCount');
+
+            if (selectedTimes.size === 0) {
+                container.innerHTML = '<div class="no-selections">还没有选择任何时间</div>';
+                countElement.textContent = '(0 个)';
+            } else {
+                const html = Array.from(selectedTimes).map(time => `
+                    <div class="selection-item">
+                        <span class="selection-time">${time}</span>
+                        <button class="delete-btn" onclick="removeSelection('${time}')">删除</button>
+                    </div>
+                `).join('');
+                container.innerHTML = html;
+                countElement.textContent = `(${selectedTimes.size} 个)`;
+            }
+        }
+
+        // 更新选择计数器
+        function updateSelectionCounter() {
+            const counter = document.getElementById('selectionCounter');
+            counter.textContent = `已选择 ${selectedTimes.size} 个时间段`;
+        }
+
+        // 删除选择
+        function removeSelection(time) {
+            selectedTimes.delete(time);
+            const element = document.querySelector(`[data-time="${time}"]`);
+            if (element) element.classList.remove('selected');
+            updateSelectionDisplay();
+            updateSelectionCounter();
+
+            // 添加触觉反馈
+            if (navigator.vibrate) {
+                navigator.vibrate(30);
+            }
+        }
+
+        // 加载预约数据
+        async function loadAppointments() {
             try {
-                // 尝试一个简单的查询来测试连接
                 const {
                     data,
                     error
                 } = await supabaseClient
                     .from('appointments')
-                    .select('id')
-                    .limit(1);
+                    .select('*')
+                    .eq('group', currentGroup);
 
                 if (error) throw error;
 
-                updateConnectionStatus(true);
-                isOnline = true;
-                console.log('数据库连接成功');
+                appointments = data || [];
+                updateTimeCounts();
+                updateRecommendations();
+                updateTimeSlotCounts();
+
             } catch (error) {
-                console.warn('网络连接失败，切换到离线模式:', error);
-                updateConnectionStatus(false);
-                isOnline = false;
+                console.error('加载数据失败:', error);
+                showNotification('加载数据失败，请刷新页面重试', 'error');
             }
         }
 
-        // 更新连接状态显示
-        function updateConnectionStatus(online) {
-            const statusElement = document.getElementById('connectionStatus');
-            if (online) {
-                statusElement.textContent = '🟢 在线模式';
-                statusElement.className = 'connection-status online';
-            } else {
-                statusElement.textContent = '🔴 离线模式';
-                statusElement.className = 'connection-status offline';
-            }
-        }
-
-        // 初始化页面
-        async function initializePage() {
-            updateWeekInfo();
-            await checkWeeklyReset();
-            await loadAppointments();
-            generateTimeGrid();
-            showGroupSelector(); // 默认显示组别选择器
-        }
-
-        // 显示组别选择器
-        function showGroupSelector() {
-            document.getElementById('groupSelector').style.display = 'flex';
-            document.getElementById('singleGroupContainer').classList.remove('show');
-            document.getElementById('backButton').classList.remove('show');
-            selectedGroup = '';
-
-            // 移除所有按钮的active状态
-            document.querySelectorAll('.group-selector-btn').forEach(btn => {
-                btn.classList.remove('active');
+        // 更新时间计数
+        function updateTimeCounts() {
+            timeCounts = {};
+            appointments.forEach(apt => {
+                apt.times.forEach(time => {
+                    if (!timeCounts[time]) {
+                        timeCounts[time] = {
+                            count: 0,
+                            participants: []
+                        };
+                    }
+                    timeCounts[time].count++;
+                    timeCounts[time].participants.push(apt.name);
+                });
             });
         }
 
-        // 选择组别
-        function selectGroup(group) {
-            selectedGroup = group;
-
-            // 更新按钮状态
-            document.querySelectorAll('.group-selector-btn').forEach(btn => {
-                btn.classList.remove('active');
+        // 更新时间段计数显示
+        function updateTimeSlotCounts() {
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                const time = slot.dataset.time;
+                const countElement = slot.querySelector('.participant-count');
+                const count = timeCounts[time] ? timeCounts[time].count : 0;
+                countElement.textContent = `${count}人选择`;
             });
-            event.target.closest('.group-selector-btn').classList.add('active');
-
-            // 延迟显示详细视图，让用户看到选择效果
-            setTimeout(() => {
-                showGroupDetail(group);
-            }, 300);
-        }
-
-        // 显示组别详细视图
-        function showGroupDetail(group) {
-            document.getElementById('groupSelector').style.display = 'none';
-            document.getElementById('backButton').classList.add('show');
-
-            generateGroupCard(group);
-
-            const container = document.getElementById('singleGroupContainer');
-            container.classList.add('show');
-            container.classList.add('fade-in');
-
-            // 移除动画类
-            setTimeout(() => {
-                container.classList.remove('fade-in');
-            }, 500);
         }
 
         // 获取推荐时间 - 优化算法，分成三缺一和已成局
@@ -1170,386 +1359,135 @@
                 }))
                 .sort((a, b) => b.count - a.count);
 
-            // 分成两个类别
-            const readyToPlay = allRecommendations.filter(rec => rec.count >= 4); // 已成局 (4人及以上)
-            const needOneMore = allRecommendations.filter(rec => rec.count === 3); // 三缺一
-            const others = allRecommendations.filter(rec => rec.count < 3 && rec.count > 0); // 其他时间
+            // 分成两类：已成局(4人)和三缺一(3人)
+            const fullTables = allRecommendations.filter(r => r.count >= 4);
+            const needOne = allRecommendations.filter(r => r.count === 3);
 
             return {
-                readyToPlay: readyToPlay.slice(0, 3), // 最多显示3个已成局
-                needOneMore: needOneMore.slice(0, 3), // 最多显示3个三缺一
-                others: others.slice(0, 3) // 最多显示3个其他时间
+                fullTables,
+                needOne
             };
         }
 
-        // 生成单个组的卡片 - 修改推荐显示部分
-        function generateGroupCard(group) {
-            const container = document.getElementById('singleGroupContainer');
+        // 更新推荐显示
+        function updateRecommendations() {
+            const container = document.getElementById('recommendations');
+            const {
+                fullTables,
+                needOne
+            } = getRecommendations(appointments);
 
-            const groupAppointments = allAppointments.filter(apt => apt.group === group);
-            const recommendations = getRecommendations(groupAppointments);
-            const mySelections = getMySelections(group);
-
-            // 生成推荐时间HTML
-            function generateRecommendationHTML(recs, title, icon, emptyMsg, badgeClass = '') {
-                if (recs.length === 0) {
-                    return `
-                        <div class="recommendation-category">
-                            <div class="category-title">
-                                <span class="icon">${icon}</span>
-                                ${title}
-                            </div>
-                            <div class="empty-category">${emptyMsg}</div>
-                        </div>
-                    `;
-                }
-
-                return `
-                    <div class="recommendation-category">
-                        <div class="category-title">
-                            <span class="icon">${icon}</span>
-                            ${title}
-                            ${badgeClass ? `<span class="category-badge ${badgeClass}">${recs.length}</span>` : ''}
-                        </div>
-                        ${recs.map(rec => `
-                            <div class="recommendation-item ${rec.count >= 4 ? 'ready' : (rec.count === 3 ? 'need-one' : '')}">
-                                <div>
-                                    <div class="time-text">${rec.time}</div>
-                                    <div class="participants">${rec.participants.join(', ')}</div>
-                                </div>
-                                <div class="participant-count ${rec.count >= 4 ? 'full' : (rec.count === 3 ? 'almost-full' : '')}">${rec.count}人</div>
-                            </div>
-                        `).join('')}
+            if (fullTables.length === 0 && needOne.length === 0) {
+                container.innerHTML = `
+                    <div class="no-recommendations">
+                        <span class="emoji">🎯</span>
+                        <span class="text">暂无推荐时间，快来约桌吧！</span>
                     </div>
                 `;
-            }
-
-            container.innerHTML = `
-                <div class="group-card">
-                    <h3 class="group-title">组${group}</h3>
-                    
-                    <div class="recommendations-section">
-                        <div class="section-title">
-                            <span class="icon">🎯</span>
-                            智能推荐时间
-                            ${(recommendations.readyToPlay.length > 0 || recommendations.needOneMore.length > 0) ? 
-                                '<span class="smart-recommendation">🔥 热门</span>' : ''
-                            }
-                        </div>
-                        
-                        <div class="recommendations-container">
-                            ${generateRecommendationHTML(
-                                recommendations.readyToPlay, 
-                                '🎉 已成局', 
-                                '✅', 
-                                '暂无成局时间',
-                                'ready-badge'
-                            )}
-                            
-                            ${generateRecommendationHTML(
-                                recommendations.needOneMore, 
-                                '🔥 三缺一', 
-                                '⏰', 
-                                '暂无三缺一时间',
-                                'need-one-badge'
-                            )}
-                            
-                            ${recommendations.others.length > 0 ? generateRecommendationHTML(
-                                recommendations.others, 
-                                '💡 其他时间', 
-                                '📋', 
-                                '',
-                                ''
-                            ) : ''}
-                            
-                            ${recommendations.readyToPlay.length === 0 && recommendations.needOneMore.length === 0 && recommendations.others.length === 0 ? 
-                                '<div class="empty-state">暂无推荐时间<br>快来约桌吧！</div>' : ''
-                            }
-                        </div>
-                    </div>
-
-                    <button class="action-button" onclick="openModal('${group}')">
-                        我要约桌
-                    </button>
-
-                    ${mySelections.length > 0 ? `
-                        <div class="my-selections">
-                            <div class="section-title">
-                                <span class="icon">👤</span>
-                                我的选择
-                                <span class="selection-count">(${mySelections.length}个)</span>
-                            </div>
-                            <div id="mySelections-${group}">
-                                ${mySelections.map(selection => `
-                                    <div class="my-selection-item">
-                                        <span>${selection}</span>
-                                        <button class="delete-btn" onclick="deleteMySelection('${group}', '${selection}')">删除</button>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        }
-
-        // 更新周信息 - 修改为每月第几周
-        function updateWeekInfo() {
-            const now = new Date();
-            const month = now.getMonth() + 1;
-            const year = now.getFullYear();
-            
-            // 获取当月第一天
-            const firstDayOfMonth = new Date(year, now.getMonth(), 1);
-            
-            // 获取当月第一天是星期几 (0=周日, 1=周一, ..., 6=周六)
-            const firstDayWeekday = firstDayOfMonth.getDay();
-            
-            // 计算当前日期
-            const currentDate = now.getDate();
-            
-            // 计算当前是当月第几周
-            // 如果第一天不是周一，那么第一周可能不完整
-            const daysSinceFirstMonday = currentDate + firstDayWeekday - 1;
-            const weekOfMonth = Math.ceil(daysSinceFirstMonday / 7);
-            
-            document.getElementById('weekInfo').textContent = `${month}月第${weekOfMonth}周`;
-        }
-
-
-        // 检查每周重置
-        async function checkWeeklyReset() {
-            const now = new Date();
-            const dayOfWeek = now.getDay();
-            const hour = now.getHours();
-            
-            // 如果是周一的0-6点，清空数据
-            if (dayOfWeek === 1 && hour < 6) {
-                const lastReset = localStorage.getItem('lastWeeklyReset');
-                const today = now.toDateString();
-                
-                if (lastReset !== today) {
-                    try {
-                        if (isOnline && supabaseClient) {
-                            await supabaseClient.from('appointments').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-                        }
-                        
-                        // 清空本地存储
-                        localStorage.removeItem(STORAGE_KEY);
-                        localStorage.removeItem(USER_KEY);
-                        localStorage.setItem('lastWeeklyReset', today);
-                        
-                        showNotification('新的一周开始啦！数据已重置 🎉', 'success');
-                    } catch (error) {
-                        console.error('重置失败:', error);
-                    }
-                }
-            }
-        }
-
-        // 加载预约数据
-        async function loadAppointments() {
-            try {
-                if (isOnline && supabaseClient) {
-                    // 在线模式：从 Supabase 加载
-                    const { data, error } = await supabaseClient
-                        .from('appointments')
-                        .select('*')
-                        .order('created_at', { ascending: false });
-
-                    if (error) throw error;
-                    allAppointments = data || [];
-                    
-                    // 保存到本地存储作为备份
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(allAppointments));
-                    console.log('从数据库加载数据成功:', allAppointments.length, '条记录');
-                } else {
-                    // 离线模式：从本地存储加载
-                    const stored = localStorage.getItem(STORAGE_KEY);
-                    allAppointments = stored ? JSON.parse(stored) : [];
-                    
-                    console.log('从本地存储加载数据:', allAppointments.length, '条记录');
-                    if (allAppointments.length === 0) {
-                        showNotification('离线模式：暂无本地数据', 'warning');
-                    }
-                }
-            } catch (error) {
-                console.error('加载数据失败:', error);
-                
-                // 如果在线加载失败，尝试从本地存储加载
-                const stored = localStorage.getItem(STORAGE_KEY);
-                allAppointments = stored ? JSON.parse(stored) : [];
-                
-                showNotification('数据库连接失败，使用本地数据', 'warning');
-            }
-        }
-
-        // 获取我的选择
-        function getMySelections(group) {
-            const userName = localStorage.getItem('userName');
-            if (!userName) return [];
-
-            const myAppointment = allAppointments.find(apt => 
-                apt.group === group && apt.name === userName
-            );
-            
-            return myAppointment ? myAppointment.times : [];
-        }
-
-        // 删除我的选择
-        async function deleteMySelection(group, timeToDelete) {
-            const userName = localStorage.getItem('userName');
-            if (!userName) {
-                showNotification('请先设置昵称', 'warning');
                 return;
             }
 
-            try {
-                const myAppointment = allAppointments.find(apt => 
-                    apt.group === group && apt.name === userName
-                );
+            let html = '';
 
-                if (myAppointment) {
-                    const updatedTimes = myAppointment.times.filter(time => time !== timeToDelete);
-                    
-                    if (updatedTimes.length === 0) {
-                        // 删除整个记录
-                        if (isOnline && supabaseClient) {
-                            const { error } = await supabaseClient
-                                .from('appointments')
-                                .delete()
-                                .eq('id', myAppointment.id);
-                            
-                            if (error) throw error;
-                        }
-                        
-                        // 从本地数组中删除
-                        allAppointments = allAppointments.filter(apt => apt.id !== myAppointment.id);
-                    } else {
-                        // 更新时间列表
-                        if (isOnline && supabaseClient) {
-                            const { error } = await supabaseClient
-                                .from('appointments')
-                                .update({ times: updatedTimes })
-                                .eq('id', myAppointment.id);
-                            
-                            if (error) throw error;
-                        }
-                        
-                        // 更新本地数组
-                        myAppointment.times = updatedTimes;
-                    }
-
-                    // 更新本地存储
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(allAppointments));
-
-                    showNotification(`已删除 ${timeToDelete}`, 'success');
-                    
-                    // 刷新当前组的显示
-                    if (selectedGroup) {
-                        generateGroupCard(selectedGroup);
-                    }
-                    triggerHapticFeedback();
-                }
-            } catch (error) {
-                console.error('删除失败:', error);
-                showNotification('删除失败', 'error');
+            if (fullTables.length > 0) {
+                html += `
+                    <div class="recommendation-category">
+                        <div class="category-title full-table">🎉 已成局 (4人桌)</div>
+                        <div class="recommendation-list">
+                            ${fullTables.slice(0, 3).map(rec => `
+                                <div class="recommendation-item">
+                                    <div class="time-info">${rec.time}</div>
+                                    <div class="participant-info">${rec.participants.join(', ')} (${rec.count}人)</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
             }
-        }
-
-        // 生成时间网格
-        function generateTimeGrid() {
-            const grid = document.getElementById('timeGrid');
-            grid.innerHTML = '';
-
-            timeSlots.forEach(time => {
-                const div = document.createElement('div');
-                div.innerHTML = `
-                    <input type="checkbox" id="time-${time}" class="time-checkbox" value="${time}">
-                    <label for="time-${time}" class="time-label">${time}</label>
+            
+            if (needOne.length > 0) {
+                html += `
+                    <div class="recommendation-category">
+                        <div class="category-title need-one">⏰ 三缺一</div>
+                        <div class="recommendation-list">
+                            ${needOne.slice(0, 3).map(rec => `
+                                <div class="recommendation-item">
+                                    <div class="time-info">${rec.time}</div>
+                                    <div class="participant-info">${rec.participants.join(', ')} (${rec.count}人)</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
                 `;
-                grid.appendChild(div);
-
-                // 添加事件监听
-                const checkbox = div.querySelector('input');
-                checkbox.addEventListener('change', updateSelectionCount);
-            });
+            }
+            
+            container.innerHTML = html;
         }
 
-        // 快捷选择 - 修改以适应新的时间段
-        function quickSelect(type) {
-            const checkboxes = document.querySelectorAll('.time-checkbox');
+        // 处理表单提交
+        async function handleSubmit(e) {
+            e.preventDefault();
             
-            checkboxes.forEach(checkbox => {
-                const time = checkbox.value;
-                let shouldCheck = false;
-
-                switch(type) {
-                    case 'weekend':
-                        shouldCheck = time.includes('周六') || time.includes('周日');
-                        break;
-                    case 'weekday':
-                        shouldCheck = (time.includes('周一') || time.includes('周二') || time.includes('周三') || time.includes('周四') || time.includes('周五')) && time.includes('19:00-22:00');
-                        break;
-                    case 'all':
-                        shouldCheck = true;
-                        break;
-                    case 'clear':
-                        shouldCheck = false;
-                        break;
-                }
-
-                checkbox.checked = shouldCheck;
-            });
-
-            updateSelectionCount();
-            checkConflicts();
-            triggerHapticFeedback();
-        }
-
-        // 更新选择计数
-        function updateSelectionCount() {
-            const checked = document.querySelectorAll('.time-checkbox:checked');
-            selectedTimes = new Set(Array.from(checked).map(cb => cb.value));
+            if (!currentGroup) {
+                showNotification('请先选择组别', 'error');
+                return;
+            }
             
-            const countElement = document.getElementById('selectionCount');
-            countElement.textContent = `已选择 ${selectedTimes.size} 个时间段`;
-            countElement.classList.add('count-animation');
+            if (selectedTimes.size === 0) {
+                showNotification('请至少选择一个时间段', 'error');
+                return;
+            }
             
-            setTimeout(() => {
-                countElement.classList.remove('count-animation');
-            }, 300);
-
-            checkConflicts();
-        }
-
-        // 冲突检测
-        function checkConflicts() {
-            if (!currentGroup) return;
-
-            const conflictWarning = document.getElementById('conflictWarning');
-            const conflicts = [];
-
-            selectedTimes.forEach(time => {
-                const groupAppointments = allAppointments.filter(apt => apt.group === currentGroup);
-                const conflictCount = groupAppointments.filter(apt => apt.times.includes(time)).length;
+            const userName = document.getElementById('userName').value.trim();
+            if (!userName) {
+                showNotification('请输入昵称', 'error');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span> 提交中...';
+            
+            try {
+                // 删除该用户在当前组的所有记录
+                await supabaseClient
+                    .from('appointments')
+                    .delete()
+                    .eq('group', currentGroup)
+                    .eq('name', userName);
                 
-                if (conflictCount >= 4) {
-                    conflicts.push({
-                        time,
-                        message: `${time} 已有${conflictCount}人选择，可能较难约到`
-                    });
-                }
-            });
-
-            if (conflicts.length > 0) {
-                conflictWarning.style.display = 'block';
-                conflictWarning.innerHTML = `
-                    <strong>⚠️ 时间冲突提醒:</strong>
-                    ${conflicts.map(c => `<div class="conflict-item">${c.message}</div>`).join('')}
-                `;
-            } else {
-                conflictWarning.style.display = 'none';
+                // 插入新记录
+                const { error } = await supabaseClient
+                    .from('appointments')
+                    .insert([{
+                        group: currentGroup,
+                        name: userName,
+                        times: Array.from(selectedTimes)
+                    }]);
+                
+                if (error) throw error;
+                
+                // 保存用户偏好
+                localStorage.setItem('userName', userName);
+                localStorage.setItem(`selectedTimes_${currentGroup}`, JSON.stringify(Array.from(selectedTimes)));
+                
+                showNotification('提交成功！', 'success');
+                
+                // 重新加载数据
+                await loadAppointments();
+                
+                // 添加成功动画效果
+                submitBtn.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    submitBtn.style.transform = 'scale(1)';
+                }, 200);
+                
+            } catch (error) {
+                console.error('提交失败:', error);
+                showNotification('提交失败，请重试', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '🚀 提交约桌申请';
             }
         }
 
@@ -1561,266 +1499,120 @@
             }
         }
 
-        // 模态框操作
-        function openModal(group) {
-            currentGroup = group;
-            const modal = document.getElementById('appointmentModal');
-            modal.style.display = 'block';
-            
-            // 预选当前用户已选择的时间
-            const mySelections = getMySelections(group);
-            document.querySelectorAll('.time-checkbox').forEach(checkbox => {
-                checkbox.checked = mySelections.includes(checkbox.value);
-            });
-            
-            updateSelectionCount();
-            triggerHapticFeedback();
-        }
-
-        function closeModal() {
-            document.getElementById('appointmentModal').style.display = 'none';
-            selectedTimes.clear();
-            document.querySelectorAll('.time-checkbox').forEach(cb => cb.checked = false);
-            updateSelectionCount();
-        }
-
-        // 设置模态框事件
-        function setupModalEvents() {
-            const modal = document.getElementById('appointmentModal');
-            const closeBtn = modal.querySelector('.close');
-
-            closeBtn.onclick = closeModal;
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    closeModal();
-                }
-            };
-
-            // ESC键关闭
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape') {
-                    closeModal();
-                }
-            });
-        }
-
-        // 提交约桌
-        async function submitAppointment() {
-            const userName = document.getElementById('userName').value.trim();
-            
-            if (!userName) {
-                showNotification('请输入昵称', 'warning');
-                return;
-            }
-
-            if (selectedTimes.size === 0) {
-                showNotification('请至少选择一个时间', 'warning');
-                return;
-            }
-
-            // 显示加载状态
-            const submitBtn = document.getElementById('submitBtn');
-            const submitText = document.getElementById('submitText');
-            const submitLoading = document.getElementById('submitLoading');
-            
-            submitBtn.disabled = true;
-            submitText.style.display = 'none';
-            submitLoading.style.display = 'inline-block';
-
-            try {
-                // 保存用户名
-                localStorage.setItem('userName', userName);
-
-                // 检查是否已存在记录
-                const existingAppointment = allAppointments.find(apt => 
-                    apt.group === currentGroup && apt.name === userName
-                );
-
-                const timesArray = Array.from(selectedTimes);
-                const appointmentData = {
-                    group: currentGroup,
-                    name: userName,
-                    times: timesArray
-                };
-
-                if (existingAppointment) {
-                    // 更新现有记录
-                    if (isOnline && supabaseClient) {
-                        const { error } = await supabaseClient
-                            .from('appointments')
-                            .update({ times: timesArray })
-                            .eq('id', existingAppointment.id);
-                        
-                        if (error) throw error;
-                    }
-                    
-                    // 更新本地数组
-                    existingAppointment.times = timesArray;
-                } else {
-                    // 创建新记录
-                    let newAppointment = appointmentData;
-                    
-                    if (isOnline && supabaseClient) {
-                        const { data, error } = await supabaseClient
-                            .from('appointments')
-                            .insert([appointmentData])
-                            .select();
-                        
-                        if (error) throw error;
-                        newAppointment = data[0];
-                    } else {
-                        // 离线模式：生成本地ID
-                        newAppointment.id = 'local_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                        newAppointment.created_at = new Date().toISOString();
-                    }
-                    
-                    allAppointments.push(newAppointment);
-                }
-
-                // 更新本地存储
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(allAppointments));
-
-                showNotification(isOnline ? '约桌成功！' : '约桌已保存到本地！', 'success');
-                closeModal();
-                
-                // 刷新当前组的显示
-                if (selectedGroup) {
-                    generateGroupCard(selectedGroup);
-                }
-                triggerHapticFeedback();
-
-            } catch (error) {
-                console.error('提交失败:', error);
-                showNotification('提交失败，已保存到本地', 'warning');
-                
-                // 即使在线提交失败，也保存到本地
-                try {
-                    const existingAppointment = allAppointments.find(apt => 
-                        apt.group === currentGroup && apt.name === userName
-                    );
-
-                    const timesArray = Array.from(selectedTimes);
-                    
-                    if (existingAppointment) {
-                        existingAppointment.times = timesArray;
-                    } else {
-                        const newAppointment = {
-                            id: 'local_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
-                            group: currentGroup,
-                            name: userName,
-                            times: timesArray,
-                            created_at: new Date().toISOString()
-                        };
-                        allAppointments.push(newAppointment);
-                    }
-                    
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(allAppointments));
-                    closeModal();
-                    if (selectedGroup) {
-                        generateGroupCard(selectedGroup);
-                    }
-                } catch (localError) {
-                    console.error('本地保存也失败:', localError);
-                }
-            } finally {
-                // 恢复按钮状态
-                submitBtn.disabled = false;
-                submitText.style.display = 'inline';
-                submitLoading.style.display = 'none';
-            }
-        }
-
-        // 通知系统
+        // 显示通知
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.classList.add('show');
-
+            notification.className = `notification ${type} show`;
+            
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
         }
 
-        // 震动反馈 (移动端)
-        function triggerHapticFeedback() {
+        // 折叠/展开工作日
+        function toggleWeekdays() {
+            const container = document.getElementById('weekdaysContainer');
+            const toggle = container.querySelector('.weekdays-toggle');
+            
+            container.classList.toggle('collapsed');
+            
+            if (container.classList.contains('collapsed')) {
+                toggle.textContent = '▶';
+                toggle.style.transform = 'rotate(0deg)';
+            } else {
+                toggle.textContent = '▼';
+                toggle.style.transform = 'rotate(0deg)';
+            }
+            
+            // 添加触觉反馈
             if (navigator.vibrate) {
-                navigator.vibrate(50);
+                navigator.vibrate(30);
             }
         }
 
-        // 粒子效果
-        function createParticleEffect() {
-            const particlesContainer = document.getElementById('particles');
-            const mahjongChars = ['🀄', '🀅', '🀆', '🀇', '🀈', '🀉', '🀊', '🀋'];
+        // 每周一自动清空数据
+        function checkWeeklyReset() {
+            const now = new Date();
+            const day = now.getDay();
+            const lastReset = localStorage.getItem('lastWeeklyReset');
+            const today = now.toDateString();
+            
+            if (day === 1 && lastReset !== today) { // 周一且今天还没重置过
+                resetWeeklyData();
+                localStorage.setItem('lastWeeklyReset', today);
+            }
+        }
 
-            function createParticle() {
-                const particle = document.createElement('div');
-                particle.className = 'mahjong-particle';
-                particle.textContent = mahjongChars[Math.floor(Math.random() * mahjongChars.length)];
-                particle.style.left = Math.random() * 100 + 'vw';
-                particle.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                particle.style.opacity = Math.random() * 0.7 + 0.3;
+        // 重置每周数据 - 修正删除方法
+        async function resetWeeklyData() {
+            try {
+                // 使用正确的删除方法
+                const { error } = await supabaseClient
+                    .from('appointments')
+                    .delete()
+                    .gt('id', '00000000-0000-0000-0000-000000000000'); // 删除所有记录的正确方式
                 
-                particlesContainer.appendChild(particle);
-
-                setTimeout(() => {
-                    particle.remove();
-                }, 5000);
+                if (error) throw error;
+                
+                console.log('每周数据已重置');
+                showNotification('新的一周开始啦！数据已重置', 'success');
+                
+                if (currentGroup) {
+                    loadAppointments();
+                }
+            } catch (error) {
+                console.error('重置数据失败:', error);
             }
-
-            // 创建初始粒子
-            for (let i = 0; i < 5; i++) {
-                setTimeout(createParticle, i * 1000);
-            }
-
-            // 持续创建新粒子
-            setInterval(createParticle, 2000);
         }
 
-        // 键盘快捷键
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey || e.metaKey) {
-                switch(e.key) {
-                    case '1':
-                    case '2':
-                    case '3':
-                        e.preventDefault();
-                        const groupIndex = parseInt(e.key) - 1;
-                        if (groupIndex < groups.length) {
-                            selectGroup(groups[groupIndex]);
-                        }
-                        break;
-                    case 'r':
-                        e.preventDefault();
-                        location.reload();
-                        break;
-                    case 'Escape':
-                        e.preventDefault();
-                        showGroupSelector();
-                        break;
+        // 页面加载时检查是否需要重置
+        document.addEventListener('DOMContentLoaded', function() {
+            checkWeeklyReset();
+        });
+
+        // 添加触摸支持
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            
+            // 检测水平滑动
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                if (deltaX > 0) {
+                    // 向右滑动 - 切换到下一个组
+                    switchGroup('next');
+                } else {
+                    // 向左滑动 - 切换到上一个组
+                    switchGroup('prev');
                 }
             }
         });
 
-        // 定期检查连接状态
-        setInterval(checkConnection, 30000); // 每30秒检查一次
-
-        // 自动刷新 (每5分钟，仅在线模式)
-        setInterval(async () => {
-            if (isOnline) {
-                await loadAppointments();
-                if (selectedGroup) {
-                    generateGroupCard(selectedGroup);
-                }
+        // 切换组别函数
+        function switchGroup(direction) {
+            const groups = ['A', 'B', 'C'];
+            const currentIndex = groups.indexOf(currentGroup);
+            
+            if (currentIndex === -1) return;
+            
+            let newIndex;
+            if (direction === 'next') {
+                newIndex = (currentIndex + 1) % groups.length;
+            } else {
+                newIndex = (currentIndex - 1 + groups.length) % groups.length;
             }
-        }, 5 * 60 * 1000);
-
-        // PWA 支持检测
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                console.log('PWA ready');
-            });
+            
+            selectGroup(groups[newIndex]);
         }
     </script>
 </body>
