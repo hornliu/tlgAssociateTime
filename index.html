@@ -277,7 +277,7 @@
         .timeline-wrapper {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 15px;
-            padding: 25px;
+            padding: 25px 0;
             border: 1px solid rgba(0, 255, 157, 0.08);
         }
         /* 工作日区域 */
@@ -329,6 +329,11 @@
         .weekdays-section.collapsed .weekdays-content {
             display: none;
         }
+        
+        .day-timeline[data-day="周六"],
+        .day-timeline[data-day="周日"] {
+            padding: 0 25px;
+        }
         /* 每日时间轴 */
         
         .day-timeline {
@@ -370,15 +375,15 @@
             border-radius: 8px;
             border: 1px solid rgba(0, 255, 157, 0.06);
             overflow: visible;
-            margin: 10px 0;
+            margin: 10px 8px;
         }
         /* 时间轨道 */
         
         .timeline-track {
             position: absolute;
             top: 70%;
-            left: 5%;
-            right: 5%;
+            left: -8px;
+            right: 0;
             height: 2px;
             background: rgba(0, 255, 157, 0.2);
             transform: translateY(-50%);
@@ -389,8 +394,8 @@
         .time-scale {
             position: absolute;
             top: 25px;
-            left: 5%;
-            right: 5%;
+            left: 0;
+            right: 0;
             height: 20px;
             pointer-events: none;
         }
@@ -403,6 +408,14 @@
             transform: translateX(-50%);
             font-weight: 500;
             white-space: nowrap;
+        }
+        
+        .scale-mark.scale-mark-first {
+            transform: translateX(0);
+        }
+        
+        .scale-mark.scale-mark-last {
+            transform: translateX(-100%);
         }
         
         .scale-mark::before {
@@ -420,8 +433,8 @@
         .time-markers {
             position: absolute;
             top: 70%;
-            left: 5%;
-            right: 5%;
+            left: 0;
+            right: 0;
             height: 25px;
             transform: translateY(-50%);
         }
@@ -1036,10 +1049,14 @@
             }
             /* 时间轴移动端适配 */
             .timeline-wrapper {
-                padding: 20px 15px;
+                padding: 20px 0;
             }
             .day-timeline {
                 margin-bottom: 20px;
+            }
+            .day-timeline[data-day="周六"],
+            .day-timeline[data-day="周日"] {
+                padding: 0 15px;
             }
             .day-label {
                 font-size: 1em;
@@ -1052,20 +1069,26 @@
             }
             .timeline-ruler {
                 height: 100px;
-                margin: 8px 0;
+                margin: 8px 8px;
             }
             .timeline-track {
                 top: 70%;
-                left: 5%;
-                right: 5%;
+                left: 0;
+                right: 0;
             }
             .time-scale {
                 top: 20px;
-                left: 5%;
-                right: 5%;
+                left: 0;
+                right: 0;
             }
             .scale-mark {
                 font-size: 0.55em;
+            }
+            .scale-mark.scale-mark-first {
+                transform: translateX(0);
+            }
+            .scale-mark.scale-mark-last {
+                transform: translateX(-100%);
             }
             .scale-mark::before {
                 height: 15px;
@@ -1074,8 +1097,8 @@
             .time-markers {
                 top: 70%;
                 height: 20px;
-                left: 5%;
-                right: 5%;
+                left: 0;
+                right: 0;
             }
             .marker-segment {
                 height: 4px;
@@ -1354,9 +1377,9 @@
                                         <div class="timeline-ruler">
                                             <div class="timeline-track"></div>
                                             <div class="time-scale">
-                                                <span class="scale-mark" style="left: -5%">19:00</span>
-                                                <span class="scale-mark" style="left: 55%">22:00</span>
-                                                <span class="scale-mark" style="left: 95%">24:00</span>
+                                                <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
+                                                <span class="scale-mark" style="left: 60%">22:00</span>
+                                                <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
                                             </div>
                                             <div class="time-markers">
                                                 <div class="time-marker" data-time="周一 19:00-22:00" data-start="19" data-end="22" style="left: 0%; width: 60%;">
@@ -1379,9 +1402,9 @@
                                         <div class="timeline-ruler">
                                             <div class="timeline-track"></div>
                                             <div class="time-scale">
-                                                <span class="scale-mark" style="left: -5%">19:00</span>
-                                                <span class="scale-mark" style="left: 55%">22:00</span>
-                                                <span class="scale-mark" style="left: 95%">24:00</span>
+                                                <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
+                                                <span class="scale-mark" style="left: 60%">22:00</span>
+                                                <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
                                             </div>
                                             <div class="time-markers">
                                                 <div class="time-marker" data-time="周二 19:00-22:00" data-start="19" data-end="22" style="left: 0%; width: 60%;">
@@ -1404,9 +1427,9 @@
                                         <div class="timeline-ruler">
                                             <div class="timeline-track"></div>
                                             <div class="time-scale">
-                                                <span class="scale-mark" style="left: -5%">19:00</span>
-                                                <span class="scale-mark" style="left: 55%">22:00</span>
-                                                <span class="scale-mark" style="left: 95%">24:00</span>
+                                                <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
+                                                <span class="scale-mark" style="left: 60%">22:00</span>
+                                                <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
                                             </div>
                                             <div class="time-markers">
                                                 <div class="time-marker" data-time="周三 19:00-22:00" data-start="19" data-end="22" style="left: 0%; width: 60%;">
@@ -1429,9 +1452,9 @@
                                         <div class="timeline-ruler">
                                             <div class="timeline-track"></div>
                                             <div class="time-scale">
-                                                <span class="scale-mark" style="left: -5%">19:00</span>
-                                                <span class="scale-mark" style="left: 55%">22:00</span>
-                                                <span class="scale-mark" style="left: 95%">24:00</span>
+                                                <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
+                                                <span class="scale-mark" style="left: 60%">22:00</span>
+                                                <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
                                             </div>
                                             <div class="time-markers">
                                                 <div class="time-marker" data-time="周四 19:00-22:00" data-start="19" data-end="22" style="left: 0%; width: 60%;">
@@ -1454,9 +1477,9 @@
                                         <div class="timeline-ruler">
                                             <div class="timeline-track"></div>
                                             <div class="time-scale">
-                                                <span class="scale-mark" style="left: -5%">19:00</span>
-                                                <span class="scale-mark" style="left: 55%">22:00</span>
-                                                <span class="scale-mark" style="left: 95%">24:00</span>
+                                                <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
+                                                <span class="scale-mark" style="left: 60%">22:00</span>
+                                                <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
                                             </div>
                                             <div class="time-markers">
                                                 <div class="time-marker" data-time="周五 19:00-22:00" data-start="19" data-end="22" style="left: 0%; width: 60%;">
@@ -1481,13 +1504,13 @@
                                 <div class="timeline-ruler">
                                     <div class="timeline-track"></div>
                                     <div class="time-scale">
-                                        <span class="scale-mark" style="left: -5%">9:00</span>
-                                        <span class="scale-mark" style="left: 15%">12:00</span>
-                                        <span class="scale-mark" style="left: 25%">14:00</span>
-                                        <span class="scale-mark" style="left: 45%">17:00</span>
-                                        <span class="scale-mark" style="left: 60%">19:00</span>
-                                        <span class="scale-mark" style="left: 77%">22:00</span>
-                                        <span class="scale-mark" style="left: 95%">24:00</span>
+                                        <span class="scale-mark scale-mark-first" style="left: 0%">9:00</span>
+                                        <span class="scale-mark" style="left: 20%">12:00</span>
+                                        <span class="scale-mark" style="left: 33.3%">14:00</span>
+                                        <span class="scale-mark" style="left: 53.3%">17:00</span>
+                                        <span class="scale-mark" style="left: 66.7%">19:00</span>
+                                        <span class="scale-mark" style="left: 86.7%">22:00</span>
+                                        <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
                                     </div>
                                     <div class="time-markers">
                                         <div class="time-marker" data-time="周六 09:00-12:00" data-start="9" data-end="12" style="left: 0%; width: 20%;">
@@ -1495,22 +1518,22 @@
                                             <div class="marker-label">上午</div>
                                             <div class="participant-badge">0人</div>
                                         </div>
-                                        <div class="time-marker" data-time="周六 14:00-17:00" data-start="14" data-end="17" style="left: 25%; width: 20%;">
+                                        <div class="time-marker" data-time="周六 14:00-17:00" data-start="14" data-end="17" style="left: 33.3%; width: 20%;">
                                             <div class="marker-segment"></div>
                                             <div class="marker-label">下午</div>
                                             <div class="participant-badge">0人</div>
                                         </div>
-                                        <div class="time-marker" data-time="周六 17:00-19:00" data-start="17" data-end="19" style="left: 45%; width: 15%;">
+                                        <div class="time-marker" data-time="周六 17:00-19:00" data-start="17" data-end="19" style="left: 53.3%; width: 13.4%;">
                                             <div class="marker-segment"></div>
                                             <div class="marker-label">傍晚</div>
                                             <div class="participant-badge">0人</div>
                                         </div>
-                                        <div class="time-marker" data-time="周六 19:00-22:00" data-start="19" data-end="22" style="left: 60%; width: 17%;">
+                                        <div class="time-marker" data-time="周六 19:00-22:00" data-start="19" data-end="22" style="left: 66.7%; width: 20%;">
                                             <div class="marker-segment"></div>
                                             <div class="marker-label">晚上</div>
                                             <div class="participant-badge">0人</div>
                                         </div>
-                                        <div class="time-marker" data-time="周六 22:00-23:59" data-start="22" data-end="24" style="left: 77%; width: 23%;">
+                                        <div class="time-marker" data-time="周六 22:00-23:59" data-start="22" data-end="24" style="left: 86.7%; width: 13.3%;">
                                             <div class="marker-segment"></div>
                                             <div class="marker-label">深夜</div>
                                             <div class="participant-badge">0人</div>
@@ -1525,13 +1548,13 @@
                                 <div class="timeline-ruler">
                                     <div class="timeline-track"></div>
                                     <div class="time-scale">
-                                        <span class="scale-mark" style="left: -5%">9:00</span>
-                                        <span class="scale-mark" style="left: 15%">12:00</span>
-                                        <span class="scale-mark" style="left: 25%">14:00</span>
-                                        <span class="scale-mark" style="left: 45%">17:00</span>
-                                        <span class="scale-mark" style="left: 60%">19:00</span>
-                                        <span class="scale-mark" style="left: 77%">22:00</span>
-                                        <span class="scale-mark" style="left: 95%">24:00</span>
+                                        <span class="scale-mark scale-mark-first" style="left: 0%">9:00</span>
+                                        <span class="scale-mark" style="left: 20%">12:00</span>
+                                        <span class="scale-mark" style="left: 33.3%">14:00</span>
+                                        <span class="scale-mark" style="left: 53.3%">17:00</span>
+                                        <span class="scale-mark" style="left: 66.7%">19:00</span>
+                                        <span class="scale-mark" style="left: 86.7%">22:00</span>
+                                        <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
                                     </div>
                                     <div class="time-markers">
                                         <div class="time-marker" data-time="周日 09:00-12:00" data-start="9" data-end="12" style="left: 0%; width: 20%;">
@@ -1539,22 +1562,22 @@
                                             <div class="marker-label">上午</div>
                                             <div class="participant-badge">0人</div>
                                         </div>
-                                        <div class="time-marker" data-time="周日 14:00-17:00" data-start="14" data-end="17" style="left: 25%; width: 20%;">
+                                        <div class="time-marker" data-time="周日 14:00-17:00" data-start="14" data-end="17" style="left: 33.3%; width: 20%;">
                                             <div class="marker-segment"></div>
                                             <div class="marker-label">下午</div>
                                             <div class="participant-badge">0人</div>
                                         </div>
-                                        <div class="time-marker" data-time="周日 17:00-19:00" data-start="17" data-end="19" style="left: 45%; width: 15%;">
+                                        <div class="time-marker" data-time="周日 17:00-19:00" data-start="17" data-end="19" style="left: 53.3%; width: 13.4%;">
                                             <div class="marker-segment"></div>
                                             <div class="marker-label">傍晚</div>
                                             <div class="participant-badge">0人</div>
                                         </div>
-                                        <div class="time-marker" data-time="周日 19:00-22:00" data-start="19" data-end="22" style="left: 60%; width: 17%;">
+                                        <div class="time-marker" data-time="周日 19:00-22:00" data-start="19" data-end="22" style="left: 66.7%; width: 20%;">
                                             <div class="marker-segment"></div>
                                             <div class="marker-label">晚上</div>
                                             <div class="participant-badge">0人</div>
                                         </div>
-                                        <div class="time-marker" data-time="周日 22:00-23:59" data-start="22" data-end="24" style="left: 77%; width: 23%;">
+                                        <div class="time-marker" data-time="周日 22:00-23:59" data-start="22" data-end="24" style="left: 86.7%; width: 13.3%;">
                                             <div class="marker-segment"></div>
                                             <div class="marker-label">深夜</div>
                                             <div class="participant-badge">0人</div>
