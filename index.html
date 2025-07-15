@@ -1302,6 +1302,38 @@
             align-items: center;
             gap: 10px;
         }
+        /* "三缺一"和"已成局"状态的特殊动画 */
+        
+        @keyframes waitingPulse {
+            0% {
+                box-shadow: 0 0 8px rgba(255, 69, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 16px rgba(255, 69, 0, 0.6);
+            }
+            100% {
+                box-shadow: 0 0 8px rgba(255, 69, 0, 0.3);
+            }
+        }
+        
+        @keyframes fullShimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+        
+        .time-marker.is-waiting .marker-segment {
+            animation: waitingPulse 2s infinite ease-in-out;
+        }
+        
+        .time-marker.is-full .marker-segment {
+            background: linear-gradient( 90deg, rgba(0, 255, 0, 0.7) 0%, rgba(150, 255, 150, 1) 50%, rgba(0, 255, 0, 0.7) 100%);
+            background-size: 200% 100%;
+            animation: fullShimmer 3s infinite linear;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -2192,6 +2224,14 @@
 
                 // 更新参与者数量属性，用于CSS颜色显示
                 marker.setAttribute('data-participants', count);
+
+                // 添加或移除特殊状态的类以触发动画
+                marker.classList.remove('is-waiting', 'is-full'); // 先重置
+                if (count === 3) {
+                    marker.classList.add('is-waiting');
+                } else if (count >= 4) {
+                    marker.classList.add('is-full');
+                }
             });
         }
 
