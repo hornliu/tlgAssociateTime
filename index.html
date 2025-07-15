@@ -1592,9 +1592,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             updateWeekInfo();
             generateFutureWeekdays();
+            updateWeekendDates();
             createMahjongParticles();
             setupEventListeners();
             loadUserPreferences();
+            restoreSession();
         });
 
         // 更新周信息
@@ -1620,19 +1622,26 @@
             // 获取今天及未来的工作日（包括今天）
             for (let i = 1; i <= 5; i++) { // 工作日：周一到周五
                 if (today === 0 || i >= today) { // 如果是周日，显示本周所有工作日；否则显示今天及今天之后的
+                    const date = new Date();
+                    date.setDate(now.getDate() + (i - today));
                     futureWeekdays.push({
                         name: weekdays[i],
-                        dayIndex: i
+                        dayIndex: i,
+                        date: `${date.getMonth() + 1}/${date.getDate()}`
                     });
                 }
             }
 
             // 如果当前周的工作日已经过完，显示下周的工作日
             if (futureWeekdays.length === 0 || (today === 6)) { // 周六显示下周
+                futureWeekdays.length = 0; // 清空，确保只显示下周的
                 for (let i = 1; i <= 5; i++) {
+                    const date = new Date();
+                    date.setDate(now.getDate() + (i - today + 7));
                     futureWeekdays.push({
                         name: `下${weekdays[i]}`,
-                        dayIndex: i
+                        dayIndex: i,
+                        date: `${date.getMonth() + 1}/${date.getDate()}`
                     });
                 }
             }
@@ -1642,7 +1651,7 @@
             if (weekdaysGrid) {
                 weekdaysGrid.innerHTML = futureWeekdays.map(day => `
                     <div class="day-timeline" data-day="${day.name}">
-                        <div class="day-label">${day.name}</div>
+                        <div class="day-label">${day.name} (${day.date})</div>
                         <div class="timeline-ruler">
                             <div class="drag-area"></div>
                             <div class="timeline-track"></div>
@@ -1688,6 +1697,29 @@
             }
         }
 
+        // 更新周末日期
+        function updateWeekendDates() {
+            const now = new Date();
+            const today = now.getDay(); // 0 = Sunday, 6 = Saturday
+
+            const saturdayLabel = document.querySelector('[data-day="周六"] .day-label');
+            const sundayLabel = document.querySelector('[data-day="周日"] .day-label');
+
+            if (saturdayLabel) {
+                const daysUntilSaturday = (6 - today + 7) % 7;
+                const saturdayDate = new Date();
+                saturdayDate.setDate(now.getDate() + daysUntilSaturday);
+                saturdayLabel.textContent += ` (${saturdayDate.getMonth() + 1}/${saturdayDate.getDate()})`;
+            }
+
+            if (sundayLabel) {
+                const daysUntilSunday = (7 - today) % 7;
+                const sundayDate = new Date();
+                sundayDate.setDate(now.getDate() + daysUntilSunday);
+                sundayLabel.textContent += ` (${sundayDate.getMonth() + 1}/${sundayDate.getDate()})`;
+            }
+        }
+
         // 创建麻将牌飘落效果
         function createMahjongParticles() {
             const particles = ['🀄', '🀅', '🀆', '🀇', '🀈', '🀉', '🀊', '🀋', '🀌', '🀍', '🀎', '🀏'];
@@ -1711,6 +1743,55 @@
             setInterval(createParticle, 2000);
         }
 
+        // --- 状态管理 & UI 更新 ---
+
+        function saveSelections() {
+            if (currentGroup) {
+                localStorage.setItem(`selectedTimes_${currentGroup}`, JSON.stringify(Array.from(selectedTimes)));
+            }
+        }
+
+        function updateAllVisuals() {
+            // 更新 "我的选择" 列表和计数器
+            const container = document.getElementById('mySelections');
+            const countElement = document.getElementById('mySelectionCount');
+
+            if (selectedTimes.size === 0) {
+                container.innerHTML = '<div class="no-selections">还没有选择任何时间</div>';
+                countElement.textContent = '(0 个)';
+            } else {
+                // 排序以保证显示顺序一致
+                const html = Array.from(selectedTimes).sort().map(time => `
+                    <div class="selection-item">
+                        <span class="selection-time">${time}</span>
+                        <button class="delete-btn" onclick="removeSelection('${time}')">删除</button>
+                    </div>
+                `).join('');
+                container.innerHTML = html;
+                countElement.textContent = `(${selectedTimes.size} 个)`;
+            }
+
+            // 更新主选择计数器
+            const counter = document.getElementById('selectionCounter');
+            counter.textContent = `已选择 ${selectedTimes.size} 个时间段`;
+
+            // 更新时间轴标记的视觉状态
+            document.querySelectorAll('.time-marker').forEach(marker => {
+                if (selectedTimes.has(marker.dataset.time)) {
+                    marker.classList.add('selected');
+                } else {
+                    marker.classList.remove('selected');
+                }
+            });
+        }
+
+        function restoreSession() {
+            const savedGroup = localStorage.getItem('currentGroup');
+            if (savedGroup) {
+                selectGroup(savedGroup);
+            }
+        }
+
         // 设置事件监听器
         function setupEventListeners() {
             // 组别选择
@@ -1725,7 +1806,7 @@
                 if (e.target.closest('.time-marker') && !isDragging) {
                     e.stopPropagation();
                     const marker = e.target.closest('.time-marker');
-                    toggleTimeSelection(marker.dataset.time, marker);
+                    toggleTimeSelection(marker.dataset.time);
                 }
             });
 
@@ -1935,8 +2016,8 @@
                     marker.classList.remove('drag-selecting');
                 });
 
-                updateSelectionDisplay();
-                updateSelectionCounter();
+                saveSelections();
+                updateAllVisuals();
 
                 if (navigator.vibrate) {
                     navigator.vibrate(50);
@@ -1947,6 +2028,7 @@
         // 选择组别
         function selectGroup(group) {
             currentGroup = group;
+            localStorage.setItem('currentGroup', group);
 
             // 更新按钮状态
             document.querySelectorAll('.group-btn').forEach(btn => {
@@ -1957,27 +2039,25 @@
             // 显示主要内容
             document.getElementById('mainContent').classList.add('active');
 
-            // 重置选择状态
-            selectedTimes.clear();
-            updateSelectionDisplay();
+            // 加载此组别已保存的选择
+            const savedTimes = JSON.parse(localStorage.getItem(`selectedTimes_${group}`)) || [];
+            selectedTimes = new Set(savedTimes);
+
+            updateAllVisuals();
 
             // 加载数据
             loadAppointments();
-
-            showNotification(`已切换到组${group}`, 'success');
         }
 
         // 切换时间选择
-        function toggleTimeSelection(time, element) {
+        function toggleTimeSelection(time) {
             if (selectedTimes.has(time)) {
                 selectedTimes.delete(time);
-                element.classList.remove('selected');
             } else {
                 selectedTimes.add(time);
-                element.classList.add('selected');
             }
-            updateSelectionDisplay();
-            updateSelectionCounter();
+            saveSelections();
+            updateAllVisuals();
 
             // 添加触觉反馈
             if (navigator.vibrate) {
@@ -2017,17 +2097,8 @@
                 }
             }
 
-            // 更新所有相关时间标记的视觉状态
-            document.querySelectorAll('.time-marker').forEach(marker => {
-                if (selectedTimes.has(marker.dataset.time)) {
-                    marker.classList.add('selected');
-                } else {
-                    marker.classList.remove('selected');
-                }
-            });
-
-            updateSelectionDisplay();
-            updateSelectionCounter();
+            saveSelections();
+            updateAllVisuals();
 
             if (navigator.vibrate) {
                 navigator.vibrate(50);
@@ -2063,10 +2134,8 @@
         // 删除选择
         function removeSelection(time) {
             selectedTimes.delete(time);
-            const element = document.querySelector(`[data-time="${time}"]`);
-            if (element) element.classList.remove('selected');
-            updateSelectionDisplay();
-            updateSelectionCounter();
+            saveSelections();
+            updateAllVisuals();
 
             if (navigator.vibrate) {
                 navigator.vibrate(30);
@@ -2171,7 +2240,7 @@
 
                 // 保存用户偏好
                 localStorage.setItem('userName', userName);
-                localStorage.setItem(`selectedTimes_${currentGroup}`, JSON.stringify(Array.from(selectedTimes)));
+                saveSelections();
 
                 // 显示成功提示（缩短时间）
                 if (selectedTimes.size > 0) {
