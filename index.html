@@ -143,6 +143,94 @@
             backdrop-filter: blur(10px);
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        /* 麻将牌CSS图案 */
+        
+        .mahjong-tile {
+            width: 24px;
+            height: 32px;
+            background: linear-gradient(145deg, #f8f8f8, #e8e8e8);
+            border: 2px solid #d0d0d0;
+            border-radius: 4px;
+            position: relative;
+            display: inline-block;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        /* .group-btn.active .mahjong-tile {
+            background: linear-gradient(145deg, #00ff9d, #00cc7d);
+            border-color: #009966;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 255, 157, 0.3);
+        } */
+        /* 组A - 中 */
+        
+        .mahjong-tile.tile-a::before {
+            content: '中';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+        /* 组B - 发 */
+        
+        .mahjong-tile.tile-b::before {
+            content: '发';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+        /* 组C - 白 */
+        
+        .mahjong-tile.tile-c {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+        }
+        
+        .mahjong-tile.tile-c::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            border: 2px solid #666;
+            border-radius: 2px;
+            background: transparent;
+        }
+        
+        .group-btn.active .mahjong-tile.tile-c {
+            background: linear-gradient(145deg, #00ff9d, #00cc7d);
+        }
+        
+        .group-btn.active .mahjong-tile.tile-c::before {
+            border-color: #000;
+        }
+        /* 覆盖激活状态，保持麻将牌原色 */
+        
+        .group-btn.active .mahjong-tile.tile-a,
+        .group-btn.active .mahjong-tile.tile-b {
+            background: linear-gradient(145deg, #f8f8f8, #e8e8e8) !important;
+            border-color: #d0d0d0 !important;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        .group-btn.active .mahjong-tile.tile-c {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0) !important;
+            border-color: #d0d0d0 !important;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        .group-btn.active .mahjong-tile.tile-c::before {
+            border-color: #666 !important;
         }
         
         .group-btn::before {
@@ -195,12 +283,10 @@
                 transform: translateY(0);
             }
         }
-        /* 卡片网格 */
+        /* 单卡片布局 */
         
         .main-menu {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 40px;
+            display: block;
             margin-bottom: 40px;
         }
         
@@ -210,7 +296,6 @@
             border: 1px solid rgba(0, 255, 157, 0.2);
             border-radius: 25px;
             padding: 35px;
-            min-height: 700px;
             transition: all 0.4s ease;
             position: relative;
             overflow: visible;
@@ -274,7 +359,7 @@
             background: linear-gradient(45deg, #00ff9d, #00b4ff);
             border-radius: 2px;
         }
-        /* 时间轴样式重新设计 - 简洁优雅版本 */
+        /* 时间轴样式 */
         
         .timeline-wrapper {
             background: rgba(255, 255, 255, 0.03);
@@ -282,65 +367,53 @@
             padding: 25px 0;
             border: 1px solid rgba(0, 255, 157, 0.08);
         }
-        /* 工作日区域 */
+        /* 周末时间轴区域 */
+        
+        .weekend-section {
+            margin-bottom: 30px;
+        }
+        
+        .weekend-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #00ff9d;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 10px;
+            background: rgba(0, 255, 157, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 157, 0.1);
+        }
+        /* 工作日时间轴区域 - 紧凑样式 */
         
         .weekdays-section {
-            background: rgba(0, 255, 157, 0.02);
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 12px;
-            border: 1px solid rgba(0, 255, 157, 0.08);
-            margin-bottom: 25px;
-            overflow: hidden;
-        }
-        
-        .weekdays-header {
-            padding: 15px 20px;
-            background: rgba(0, 255, 157, 0.04);
-            border-bottom: 1px solid rgba(0, 255, 157, 0.08);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .weekdays-header:hover {
-            background: rgba(0, 255, 157, 0.06);
+            padding: 15px;
+            border: 1px solid rgba(0, 255, 157, 0.05);
         }
         
         .weekdays-title {
             font-size: 1.1em;
             font-weight: 600;
-            color: #00ff9d;
-        }
-        
-        .weekdays-toggle {
-            font-size: 0.9em;
-            color: rgba(255, 255, 255, 0.6);
-            transition: all 0.3s ease;
-        }
-        
-        .weekdays-section.collapsed .weekdays-toggle {
-            transform: rotate(-90deg);
-        }
-        
-        .weekdays-content {
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
-        
-        .weekdays-section.collapsed .weekdays-content {
-            display: none;
-        }
-        
-        .day-timeline[data-day="周六"],
-        .day-timeline[data-day="周日"] {
-            padding: 0 25px;
+            color: rgba(0, 255, 157, 0.8);
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 8px;
+            background: rgba(0, 255, 157, 0.03);
+            border-radius: 8px;
         }
         /* 每日时间轴 */
         
         .day-timeline {
             margin-bottom: 25px;
             position: relative;
+        }
+        /* 工作日紧凑样式 */
+        
+        .weekdays-section .day-timeline {
+            margin-bottom: 15px;
         }
         
         .day-timeline:last-child {
@@ -356,6 +429,13 @@
             padding-left: 8px;
             position: relative;
         }
+        /* 工作日标签紧凑样式 */
+        
+        .weekdays-section .day-label {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: rgba(0, 255, 157, 0.9);
+        }
         
         .day-label::before {
             content: '';
@@ -368,6 +448,12 @@
             background: #00ff9d;
             border-radius: 1.5px;
         }
+        
+        .weekdays-section .day-label::before {
+            width: 2px;
+            height: 12px;
+            background: rgba(0, 255, 157, 0.6);
+        }
         /* 时间标尺 */
         
         .timeline-ruler {
@@ -378,20 +464,27 @@
             border: 1px solid rgba(0, 255, 157, 0.06);
             overflow: visible;
             margin: 10px 8px;
+            user-select: none;
+        }
+        /* 工作日时间标尺紧凑样式 */
+        
+        .weekdays-section .timeline-ruler {
+            height: 80px;
+            margin: 8px 6px;
         }
         /* 时间轨道 */
         
         .timeline-track {
             position: absolute;
             top: 70%;
-            left: -8px;
+            left: 0;
             right: 0;
             height: 2px;
             background: rgba(0, 255, 157, 0.2);
             transform: translateY(-50%);
             border-radius: 1px;
         }
-        /* 时间刻度 - 重新定位在时间段之间 */
+        /* 时间刻度 */
         
         .time-scale {
             position: absolute;
@@ -402,6 +495,10 @@
             pointer-events: none;
         }
         
+        .weekdays-section .time-scale {
+            top: 15px;
+        }
+        
         .scale-mark {
             position: absolute;
             top: 0;
@@ -410,6 +507,10 @@
             transform: translateX(-50%);
             font-weight: 500;
             white-space: nowrap;
+        }
+        
+        .weekdays-section .scale-mark {
+            font-size: 0.6em;
         }
         
         .scale-mark.scale-mark-first {
@@ -430,7 +531,12 @@
             height: 20px;
             background: rgba(0, 255, 157, 0.15);
         }
-        /* 时间标记容器 - 重新定位 */
+        
+        .weekdays-section .scale-mark::before {
+            height: 15px;
+            top: 12px;
+        }
+        /* 时间标记容器 */
         
         .time-markers {
             position: absolute;
@@ -463,20 +569,59 @@
             border-radius: 3px;
             transition: all 0.3s ease;
         }
+        /* 根据人数显示不同颜色 */
+        
+        .time-marker[data-participants="0"] .marker-segment {
+            background: rgba(128, 128, 128, 0.3);
+        }
+        
+        .time-marker[data-participants="1"] .marker-segment {
+            background: rgba(255, 255, 0, 0.4);
+        }
+        
+        .time-marker[data-participants="2"] .marker-segment {
+            background: rgba(255, 165, 0, 0.5);
+        }
+        
+        .time-marker[data-participants="3"] .marker-segment {
+            background: rgba(255, 69, 0, 0.6);
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
+        }
+        
+        .time-marker[data-participants="4"] .marker-segment,
+        .time-marker[data-participants="5"] .marker-segment,
+        .time-marker[data-participants="6"] .marker-segment,
+        .time-marker[data-participants="7"] .marker-segment,
+        .time-marker[data-participants="8"] .marker-segment,
+        .time-marker[data-participants="9"] .marker-segment {
+            background: rgba(0, 255, 0, 0.7);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+        }
         
         .time-marker:hover .marker-segment {
-            background: rgba(0, 255, 157, 0.5);
             height: 8px;
             border-radius: 4px;
         }
         
         .time-marker.selected .marker-segment {
-            background: #00ff9d;
+            background: #00ff9d !important;
             height: 10px;
             border-radius: 5px;
             box-shadow: 0 0 15px rgba(0, 255, 157, 0.4);
         }
-        /* 标记标签 - 移动到下方避免冲突 */
+        
+        .weekdays-section .marker-segment {
+            height: 4px;
+        }
+        
+        .weekdays-section .time-marker:hover .marker-segment {
+            height: 6px;
+        }
+        
+        .weekdays-section .time-marker.selected .marker-segment {
+            height: 8px;
+        }
+        /* 标记标签 */
         
         .marker-label {
             position: absolute;
@@ -492,6 +637,11 @@
             z-index: 3;
         }
         
+        .weekdays-section .marker-label {
+            font-size: 0.6em;
+            bottom: -25px;
+        }
+        
         .time-marker:hover .marker-label {
             color: rgba(255, 255, 255, 0.8);
         }
@@ -500,7 +650,7 @@
             color: #00ff9d;
             font-weight: 600;
         }
-        /* 参与者徽章 - 重新定位到上方避免冲突 */
+        /* 参与者徽章 */
         
         .participant-badge {
             position: absolute;
@@ -522,6 +672,13 @@
             text-align: center;
         }
         
+        .weekdays-section .participant-badge {
+            font-size: 0.5em;
+            padding: 1px 4px;
+            top: -20px;
+            min-width: 20px;
+        }
+        
         .time-marker:hover .participant-badge {
             background: rgba(0, 255, 157, 0.2);
             border-color: rgba(0, 255, 157, 0.3);
@@ -533,244 +690,19 @@
             border-color: #00ff9d;
             font-weight: 700;
         }
-        /* 时间轴连接线 */
+        /* 拖拽选择样式 */
         
-        .timeline-connector {
-            position: absolute;
-            left: 60px;
-            top: 20px;
-            bottom: 20px;
-            width: 2px;
-            background: linear-gradient(180deg, rgba(0, 255, 157, 0.3) 0%, rgba(0, 180, 255, 0.3) 100%);
-            z-index: 1;
-        }
-        /* 时间轴天数 */
-        
-        .timeline-day {
-            margin-bottom: 30px;
-            position: relative;
-        }
-        
-        .timeline-day-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            position: relative;
-        }
-        
-        .day-label {
-            font-size: 1.2em;
-            font-weight: 600;
-            color: #00ff9d;
-            width: 80px;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .timeline-track {
-            flex: 1;
-            height: 4px;
-            background: linear-gradient(90deg, rgba(0, 255, 157, 0.2) 0%, rgba(0, 180, 255, 0.2) 100%);
-            border-radius: 2px;
-            margin-left: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .timeline-track::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background: linear-gradient(90deg, transparent 0%, rgba(0, 255, 157, 0.5) 50%, transparent 100%);
-            animation: shimmer 3s ease-in-out infinite;
-        }
-        
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
-        }
-        /* 时间轴节点 */
-        
-        .timeline-day::before {
-            content: '';
-            position: absolute;
-            left: 55px;
-            top: 20px;
-            width: 12px;
-            height: 12px;
-            background: linear-gradient(45deg, #00ff9d, #00b4ff);
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 15px rgba(0, 255, 157, 0.4);
-            z-index: 3;
-            animation: nodeGlow 3s ease-in-out infinite;
-        }
-        
-        @keyframes nodeGlow {
-            0%,
-            100% {
-                box-shadow: 0 0 15px rgba(0, 255, 157, 0.4);
-                transform: scale(1);
-            }
-            50% {
-                box-shadow: 0 0 25px rgba(0, 255, 157, 0.6);
-                transform: scale(1.1);
-            }
-        }
-        
-        .time-slots-timeline {
-            display: flex;
-            gap: 8px;
-            padding: 10px 0;
-            overflow-x: auto;
-            align-items: center;
-            position: relative;
-        }
-        
-        .time-slot-timeline {
-            position: relative;
-            min-width: 100px;
-            height: 50px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-            border: 2px solid rgba(0, 255, 157, 0.3);
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            backdrop-filter: blur(5px);
-        }
-        
-        .time-slot-timeline::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, #00ff9d, #00b4ff);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-        }
-        
-        .time-slot-timeline:hover::before {
-            opacity: 0.1;
-        }
-        
-        .time-slot-timeline.selected::before {
-            opacity: 0.8;
-            animation: pulseGlow 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulseGlow {
-            0%,
-            100% {
-                opacity: 0.8;
-            }
-            50% {
-                opacity: 0.9;
-            }
-        }
-        
-        .time-slot-content-timeline {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            pointer-events: none;
-        }
-        
-        .time-text-timeline {
-            font-size: 0.85em;
-            font-weight: 600;
-            margin-bottom: 2px;
-            transition: color 0.3s ease;
-            color: #ffffff;
-        }
-        
-        .participant-count-timeline {
-            font-size: 0.7em;
-            color: rgba(255, 255, 255, 0.7);
-            transition: color 0.3s ease;
-        }
-        
-        .time-slot-timeline:hover {
-            border-color: rgba(0, 255, 157, 0.6);
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(0, 255, 157, 0.3);
-        }
-        
-        .time-slot-timeline.selected {
-            border-color: #00ff9d;
-            box-shadow: 0 10px 30px rgba(0, 255, 157, 0.5);
-            transform: translateY(-3px) scale(1.05);
-        }
-        
-        .time-slot-timeline.selected .time-text-timeline,
-        .time-slot-timeline.selected .participant-count-timeline {
-            color: #000;
-            font-weight: 700;
-        }
-        /* 工作日容器 */
-        
-        .weekdays-container-timeline {
+        .timeline-ruler.selecting {
             background: rgba(0, 255, 157, 0.05);
-            border-radius: 15px;
-            border: 1px solid rgba(0, 255, 157, 0.2);
-            margin-bottom: 25px;
-            overflow: hidden;
-            position: relative;
         }
         
-        .weekdays-header-timeline {
-            padding: 15px 20px;
-            background: linear-gradient(90deg, rgba(0, 255, 157, 0.1) 0%, rgba(0, 180, 255, 0.1) 100%);
-            border-bottom: 1px solid rgba(0, 255, 157, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .time-marker.drag-selecting .marker-segment {
+            background: rgba(0, 255, 157, 0.6) !important;
+            height: 8px;
         }
         
-        .weekdays-header-timeline:hover {
-            background: linear-gradient(90deg, rgba(0, 255, 157, 0.15) 0%, rgba(0, 180, 255, 0.15) 100%);
-        }
-        
-        .weekdays-title {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #00ff9d;
-        }
-        
-        .weekdays-toggle {
-            font-size: 0.9em;
-            color: rgba(255, 255, 255, 0.7);
-            transition: transform 0.3s ease;
-        }
-        
-        .weekdays-container-timeline.collapsed .weekdays-toggle {
-            transform: rotate(-90deg);
-        }
-        
-        .weekdays-content-timeline {
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
-        
-        .weekdays-container-timeline.collapsed .weekdays-content-timeline {
-            display: none;
+        .weekdays-section .time-marker.drag-selecting .marker-segment {
+            height: 6px;
         }
         /* 快捷选择按钮 */
         
@@ -940,105 +872,9 @@
             cursor: not-allowed;
             transform: none;
         }
-        /* 智能推荐样式 */
-        
-        .smart-recommendations {
-            margin-bottom: 30px;
-        }
-        
-        .recommendation-title {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .recommendation-category {
-            margin-bottom: 20px;
-        }
-        
-        .category-title {
-            font-size: 1.1em;
-            font-weight: 600;
-            margin-bottom: 10px;
-            padding: 8px 15px;
-            border-radius: 15px;
-            display: inline-block;
-        }
-        
-        .full-table {
-            background: linear-gradient(45deg, #ff6b9d, #ff8a80);
-            color: #fff;
-        }
-        
-        .need-one {
-            background: linear-gradient(45deg, #ffd54f, #ffb74d);
-            color: #000;
-        }
-        
-        .recommendation-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        
-        .recommendation-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 255, 157, 0.1);
-            border-radius: 12px;
-            transition: all 0.3s ease;
-        }
-        
-        .recommendation-item:hover {
-            background: rgba(0, 255, 157, 0.1);
-            border-color: rgba(0, 255, 157, 0.3);
-            transform: translateX(5px);
-        }
-        
-        .time-info {
-            font-weight: 600;
-            color: #fff;
-        }
-        
-        .participant-info {
-            font-size: 0.9em;
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .no-recommendations {
-            text-align: center;
-            padding: 20px;
-            color: rgba(255, 255, 255, 0.6);
-        }
-        
-        .no-recommendations .emoji {
-            font-size: 2em;
-            margin-bottom: 10px;
-            display: block;
-            font-style: normal;
-        }
-        
-        .no-recommendations .text {
-            font-style: italic;
-        }
         /* 响应式设计 */
         
         @media (max-width: 768px) {
-            .main-menu {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            .group-card {
-                padding: 20px;
-                min-height: auto;
-            }
             .title {
                 font-size: 2.5em;
             }
@@ -1056,14 +892,17 @@
             .day-timeline {
                 margin-bottom: 20px;
             }
-            .day-timeline[data-day="周六"],
-            .day-timeline[data-day="周日"] {
-                padding: 0 15px;
+            .weekdays-section .day-timeline {
+                margin-bottom: 12px;
             }
             .day-label {
                 font-size: 1em;
                 margin-bottom: 12px;
                 padding-left: 6px;
+            }
+            .weekdays-section .day-label {
+                font-size: 0.9em;
+                margin-bottom: 8px;
             }
             .day-label::before {
                 width: 2px;
@@ -1072,6 +911,10 @@
             .timeline-ruler {
                 height: 100px;
                 margin: 8px 8px;
+            }
+            .weekdays-section .timeline-ruler {
+                height: 70px;
+                margin: 6px 6px;
             }
             .timeline-track {
                 top: 70%;
@@ -1083,8 +926,14 @@
                 left: 0;
                 right: 0;
             }
+            .weekdays-section .time-scale {
+                top: 12px;
+            }
             .scale-mark {
                 font-size: 0.55em;
+            }
+            .weekdays-section .scale-mark {
+                font-size: 0.5em;
             }
             .scale-mark.scale-mark-first {
                 transform: translateX(0);
@@ -1095,6 +944,10 @@
             .scale-mark::before {
                 height: 15px;
                 top: 12px;
+            }
+            .weekdays-section .scale-mark::before {
+                height: 12px;
+                top: 10px;
             }
             .time-markers {
                 top: 70%;
@@ -1114,9 +967,22 @@
                 height: 8px;
                 border-radius: 4px;
             }
+            .weekdays-section .marker-segment {
+                height: 3px;
+            }
+            .weekdays-section .time-marker:hover .marker-segment {
+                height: 5px;
+            }
+            .weekdays-section .time-marker.selected .marker-segment {
+                height: 6px;
+            }
             .marker-label {
                 font-size: 0.6em;
                 bottom: -30px;
+            }
+            .weekdays-section .marker-label {
+                font-size: 0.5em;
+                bottom: -20px;
             }
             .participant-badge {
                 font-size: 0.5em;
@@ -1125,14 +991,11 @@
                 border-radius: 4px;
                 min-width: 20px;
             }
-            .weekdays-content {
-                padding: 15px;
-            }
-            .weekdays-header {
-                padding: 12px 15px;
-            }
-            .weekdays-title {
-                font-size: 1em;
+            .weekdays-section .participant-badge {
+                font-size: 0.45em;
+                padding: 1px 3px;
+                top: -15px;
+                min-width: 18px;
             }
             /* 移动端通知优化 */
             .notification {
@@ -1327,25 +1190,23 @@
 
         <!-- 组别选择 -->
         <div class="group-selector">
-            <button class="group-btn" data-group="A">🀄 组A</button>
-            <button class="group-btn" data-group="B">🀅 组B</button>
-            <button class="group-btn" data-group="C">🀆 组C</button>
+            <button class="group-btn" data-group="A">
+                <div class="mahjong-tile tile-a"></div>
+                <span>组A</span>
+            </button>
+            <button class="group-btn" data-group="B">
+                <div class="mahjong-tile tile-b"></div>
+                <span>组B</span>
+            </button>
+            <button class="group-btn" data-group="C">
+                <div class="mahjong-tile tile-c"></div>
+                <span>组C</span>
+            </button>
         </div>
 
         <!-- 主要内容区域 -->
         <div class="main-content" id="mainContent">
             <div class="main-menu">
-                <!-- 智能推荐卡片 -->
-                <div class="group-card">
-                    <h3 class="card-title">🤖 智能推荐时间</h3>
-                    <div class="smart-recommendations" id="recommendations">
-                        <div class="no-recommendations">
-                            <span class="emoji">🎯</span>
-                            <span class="text">暂无推荐时间，快来约桌吧！</span>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- 我要约桌卡片 -->
                 <div class="group-card">
                     <h3 class="card-title">🎲 我要约桌</h3>
@@ -1366,376 +1227,405 @@
 
                         <!-- 时间轴容器 -->
                         <div class="timeline-wrapper">
-                            <!-- 工作日时间轴 (周一至周五) -->
-                            <div class="day-timeline" data-day="周一">
-                                <div class="day-label">周一</div>
-                                <div class="timeline-ruler">
-                                    <div class="timeline-track"></div>
-                                    <div class="time-scale">
-                                        <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
-                                        <span class="scale-mark" style="left: 20%">20:00</span>
-                                        <span class="scale-mark" style="left: 40%">21:00</span>
-                                        <span class="scale-mark" style="left: 60%">22:00</span>
-                                        <span class="scale-mark" style="left: 80%">23:00</span>
-                                        <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
-                                    </div>
-                                    <div class="time-markers">
-                                        <div class="time-marker" data-time="周一 19:00-20:00" data-start="19" data-end="20" style="left: 0%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">19-20</div>
-                                            <div class="participant-badge">0人</div>
+                            <!-- 周末时间轴区域 -->
+                            <div class="weekend-section">
+                                <div class="weekend-title">🌟 周末时间</div>
+
+                                <!-- 周六时间轴 -->
+                                <div class="day-timeline" data-day="周六">
+                                    <div class="day-label">周六</div>
+                                    <div class="timeline-ruler">
+                                        <div class="timeline-track"></div>
+                                        <div class="time-scale">
+                                            <span class="scale-mark scale-mark-first" style="left: 0%">9:00</span>
+                                            <span class="scale-mark" style="left: 20%">12:00</span>
+                                            <span class="scale-mark" style="left: 33.3%">14:00</span>
+                                            <span class="scale-mark" style="left: 53.3%">17:00</span>
+                                            <span class="scale-mark" style="left: 66.7%">19:00</span>
+                                            <span class="scale-mark" style="left: 86.7%">22:00</span>
+                                            <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
                                         </div>
-                                        <div class="time-marker" data-time="周一 20:00-21:00" data-start="20" data-end="21" style="left: 20%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">20-21</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周一 21:00-22:00" data-start="21" data-end="22" style="left: 40%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">21-22</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周一 22:00-23:00" data-start="22" data-end="23" style="left: 60%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">22-23</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周一 23:00-23:59" data-start="23" data-end="24" style="left: 80%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">23-24</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="day-timeline" data-day="周二">
-                                <div class="day-label">周二</div>
-                                <div class="timeline-ruler">
-                                    <div class="timeline-track"></div>
-                                    <div class="time-scale">
-                                        <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
-                                        <span class="scale-mark" style="left: 20%">20:00</span>
-                                        <span class="scale-mark" style="left: 40%">21:00</span>
-                                        <span class="scale-mark" style="left: 60%">22:00</span>
-                                        <span class="scale-mark" style="left: 80%">23:00</span>
-                                        <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
-                                    </div>
-                                    <div class="time-markers">
-                                        <div class="time-marker" data-time="周二 19:00-20:00" data-start="19" data-end="20" style="left: 0%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">19-20</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周二 20:00-21:00" data-start="20" data-end="21" style="left: 20%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">20-21</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周二 21:00-22:00" data-start="21" data-end="22" style="left: 40%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">21-22</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周二 22:00-23:00" data-start="22" data-end="23" style="left: 60%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">22-23</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周二 23:00-23:59" data-start="23" data-end="24" style="left: 80%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">23-24</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="day-timeline" data-day="周三">
-                                <div class="day-label">周三</div>
-                                <div class="timeline-ruler">
-                                    <div class="timeline-track"></div>
-                                    <div class="time-scale">
-                                        <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
-                                        <span class="scale-mark" style="left: 20%">20:00</span>
-                                        <span class="scale-mark" style="left: 40%">21:00</span>
-                                        <span class="scale-mark" style="left: 60%">22:00</span>
-                                        <span class="scale-mark" style="left: 80%">23:00</span>
-                                        <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
-                                    </div>
-                                    <div class="time-markers">
-                                        <div class="time-marker" data-time="周三 19:00-20:00" data-start="19" data-end="20" style="left: 0%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">19-20</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周三 20:00-21:00" data-start="20" data-end="21" style="left: 20%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">20-21</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周三 21:00-22:00" data-start="21" data-end="22" style="left: 40%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">21-22</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周三 22:00-23:00" data-start="22" data-end="23" style="left: 60%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">22-23</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周三 23:00-23:59" data-start="23" data-end="24" style="left: 80%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">23-24</div>
-                                            <div class="participant-badge">0人</div>
+                                        <div class="time-markers">
+                                            <div class="time-marker" data-time="周六 09:00-10:00" data-participants="0" style="left: 0%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">9-10</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周六 10:00-11:00" data-participants="0" style="left: 6.67%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">10-11</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周六 11:00-12:00" data-participants="0" style="left: 13.34%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">11-12</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周六 12:00-13:00" data-participants="0" style="left: 20%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">12-13</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周六 13:00-14:00" data-participants="0" style="left: 26.67%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">13-14</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周六 14:00-15:00" data-participants="0" style="left: 33.33%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">14-15</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周六 15:00-16:00" data-participants="0" style="left: 40.00%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">15-16</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周六 16:00-17:00" data-participants="0" style="left: 46.67%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">16-17</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周六 17:00-18:00" data-participants="0" style="left: 53.33%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">17-18</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周六 18:00-19:00" data-participants="0" style="left: 60.00%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">18-19</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周六 19:00-20:00" data-participants="0" style="left: 66.67%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">19-20</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周六 20:00-21:00" data-participants="0" style="left: 73.34%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">20-21</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周六 21:00-22:00" data-participants="0" style="left: 80.01%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">21-22</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周六 22:00-23:00" data-participants="0" style="left: 86.67%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">22-23</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周六 23:00-23:59" data-participants="0" style="left: 93.34%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">23-24</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="day-timeline" data-day="周四">
-                                <div class="day-label">周四</div>
-                                <div class="timeline-ruler">
-                                    <div class="timeline-track"></div>
-                                    <div class="time-scale">
-                                        <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
-                                        <span class="scale-mark" style="left: 20%">20:00</span>
-                                        <span class="scale-mark" style="left: 40%">21:00</span>
-                                        <span class="scale-mark" style="left: 60%">22:00</span>
-                                        <span class="scale-mark" style="left: 80%">23:00</span>
-                                        <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
-                                    </div>
-                                    <div class="time-markers">
-                                        <div class="time-marker" data-time="周四 19:00-20:00" data-start="19" data-end="20" style="left: 0%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">19-20</div>
-                                            <div class="participant-badge">0人</div>
+
+                                <!-- 周日时间轴 -->
+                                <div class="day-timeline" data-day="周日">
+                                    <div class="day-label">周日</div>
+                                    <div class="timeline-ruler">
+                                        <div class="timeline-track"></div>
+                                        <div class="time-scale">
+                                            <span class="scale-mark scale-mark-first" style="left: 0%">9:00</span>
+                                            <span class="scale-mark" style="left: 20%">12:00</span>
+                                            <span class="scale-mark" style="left: 33.3%">14:00</span>
+                                            <span class="scale-mark" style="left: 53.3%">17:00</span>
+                                            <span class="scale-mark" style="left: 66.7%">19:00</span>
+                                            <span class="scale-mark" style="left: 86.7%">22:00</span>
+                                            <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
                                         </div>
-                                        <div class="time-marker" data-time="周四 20:00-21:00" data-start="20" data-end="21" style="left: 20%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">20-21</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周四 21:00-22:00" data-start="21" data-end="22" style="left: 40%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">21-22</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周四 22:00-23:00" data-start="22" data-end="23" style="left: 60%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">22-23</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周四 23:00-23:59" data-start="23" data-end="24" style="left: 80%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">23-24</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="day-timeline" data-day="周五">
-                                <div class="day-label">周五</div>
-                                <div class="timeline-ruler">
-                                    <div class="timeline-track"></div>
-                                    <div class="time-scale">
-                                        <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
-                                        <span class="scale-mark" style="left: 20%">20:00</span>
-                                        <span class="scale-mark" style="left: 40%">21:00</span>
-                                        <span class="scale-mark" style="left: 60%">22:00</span>
-                                        <span class="scale-mark" style="left: 80%">23:00</span>
-                                        <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
-                                    </div>
-                                    <div class="time-markers">
-                                        <div class="time-marker" data-time="周五 19:00-20:00" data-start="19" data-end="20" style="left: 0%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">19-20</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周五 20:00-21:00" data-start="20" data-end="21" style="left: 20%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">20-21</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周五 21:00-22:00" data-start="21" data-end="22" style="left: 40%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">21-22</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周五 22:00-23:00" data-start="22" data-end="23" style="left: 60%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">22-23</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周五 23:00-23:59" data-start="23" data-end="24" style="left: 80%; width: 20%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">23-24</div>
-                                            <div class="participant-badge">0人</div>
+                                        <div class="time-markers">
+                                            <div class="time-marker" data-time="周日 09:00-10:00" data-participants="0" style="left: 0%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">9-10</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周日 10:00-11:00" data-participants="0" style="left: 6.67%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">10-11</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周日 11:00-12:00" data-participants="0" style="left: 13.34%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">11-12</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周日 12:00-13:00" data-participants="0" style="left: 20%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">12-13</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周日 13:00-14:00" data-participants="0" style="left: 26.67%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">13-14</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周日 14:00-15:00" data-participants="0" style="left: 33.33%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">14-15</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周日 15:00-16:00" data-participants="0" style="left: 40.00%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">15-16</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周日 16:00-17:00" data-participants="0" style="left: 46.67%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">16-17</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周日 17:00-18:00" data-participants="0" style="left: 53.33%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">17-18</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周日 18:00-19:00" data-participants="0" style="left: 60.00%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">18-19</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周日 19:00-20:00" data-participants="0" style="left: 66.67%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">19-20</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周日 20:00-21:00" data-participants="0" style="left: 73.34%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">20-21</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周日 21:00-22:00" data-participants="0" style="left: 80.01%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">21-22</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周日 22:00-23:00" data-participants="0" style="left: 86.67%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">22-23</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周日 23:00-23:59" data-participants="0" style="left: 93.34%; width: 6.67%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">23-24</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 周六时间轴 -->
-                            <div class="day-timeline" data-day="周六">
-                                <div class="day-label">周六</div>
-                                <div class="timeline-ruler">
-                                    <div class="timeline-track"></div>
-                                    <div class="time-scale">
-                                        <span class="scale-mark scale-mark-first" style="left: 0%">9:00</span>
-                                        <span class="scale-mark" style="left: 20%">12:00</span>
-                                        <span class="scale-mark" style="left: 33.3%">14:00</span>
-                                        <span class="scale-mark" style="left: 53.3%">17:00</span>
-                                        <span class="scale-mark" style="left: 66.7%">19:00</span>
-                                        <span class="scale-mark" style="left: 86.7%">22:00</span>
-                                        <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
-                                    </div>
-                                    <div class="time-markers">
-                                        <div class="time-marker" data-time="周六 09:00-10:00" data-start="9" data-end="10" style="left: 0%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">9-10</div>
-                                            <div class="participant-badge">0人</div>
+                            <!-- 工作日时间轴区域 -->
+                            <div class="weekdays-section">
+                                <div class="weekdays-title">📅 工作日时间</div>
+
+                                <div class="day-timeline" data-day="周一">
+                                    <div class="day-label">周一</div>
+                                    <div class="timeline-ruler">
+                                        <div class="timeline-track"></div>
+                                        <div class="time-scale">
+                                            <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
+                                            <span class="scale-mark" style="left: 20%">20:00</span>
+                                            <span class="scale-mark" style="left: 40%">21:00</span>
+                                            <span class="scale-mark" style="left: 60%">22:00</span>
+                                            <span class="scale-mark" style="left: 80%">23:00</span>
+                                            <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
                                         </div>
-                                        <div class="time-marker" data-time="周六 10:00-11:00" data-start="10" data-end="11" style="left: 6.67%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">10-11</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周六 11:00-12:00" data-start="11" data-end="12" style="left: 13.34%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">11-12</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周六 14:00-15:00" data-start="14" data-end="15" style="left: 33.33%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">14-15</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周六 15:00-16:00" data-start="15" data-end="16" style="left: 40.00%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">15-16</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周六 16:00-17:00" data-start="16" data-end="17" style="left: 46.67%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">16-17</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周六 17:00-18:00" data-start="17" data-end="18" style="left: 53.33%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">17-18</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周六 18:00-19:00" data-start="18" data-end="19" style="left: 60.00%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">18-19</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周六 19:00-20:00" data-start="19" data-end="20" style="left: 66.67%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">19-20</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周六 20:00-21:00" data-start="20" data-end="21" style="left: 73.34%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">20-21</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周六 21:00-22:00" data-start="21" data-end="22" style="left: 80.01%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">21-22</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周六 22:00-23:00" data-start="22" data-end="23" style="left: 86.67%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">22-23</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周六 23:00-23:59" data-start="23" data-end="24" style="left: 93.34%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">23-24</div>
-                                            <div class="participant-badge">0人</div>
+                                        <div class="time-markers">
+                                            <div class="time-marker" data-time="周一 19:00-20:00" data-participants="0" style="left: 0%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">19-20</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周一 20:00-21:00" data-participants="0" style="left: 20%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">20-21</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周一 21:00-22:00" data-participants="0" style="left: 40%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">21-22</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周一 22:00-23:00" data-participants="0" style="left: 60%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">22-23</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周一 23:00-23:59" data-participants="0" style="left: 80%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">23-24</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <!-- 周日时间轴 -->
-                            <div class="day-timeline" data-day="周日">
-                                <div class="day-label">周日</div>
-                                <div class="timeline-ruler">
-                                    <div class="timeline-track"></div>
-                                    <div class="time-scale">
-                                        <span class="scale-mark scale-mark-first" style="left: 0%">9:00</span>
-                                        <span class="scale-mark" style="left: 20%">12:00</span>
-                                        <span class="scale-mark" style="left: 33.3%">14:00</span>
-                                        <span class="scale-mark" style="left: 53.3%">17:00</span>
-                                        <span class="scale-mark" style="left: 66.7%">19:00</span>
-                                        <span class="scale-mark" style="left: 86.7%">22:00</span>
-                                        <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
+                                <div class="day-timeline" data-day="周二">
+                                    <div class="day-label">周二</div>
+                                    <div class="timeline-ruler">
+                                        <div class="timeline-track"></div>
+                                        <div class="time-scale">
+                                            <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
+                                            <span class="scale-mark" style="left: 20%">20:00</span>
+                                            <span class="scale-mark" style="left: 40%">21:00</span>
+                                            <span class="scale-mark" style="left: 60%">22:00</span>
+                                            <span class="scale-mark" style="left: 80%">23:00</span>
+                                            <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
+                                        </div>
+                                        <div class="time-markers">
+                                            <div class="time-marker" data-time="周二 19:00-20:00" data-participants="0" style="left: 0%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">19-20</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周二 20:00-21:00" data-participants="0" style="left: 20%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">20-21</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周二 21:00-22:00" data-participants="0" style="left: 40%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">21-22</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周二 22:00-23:00" data-participants="0" style="left: 60%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">22-23</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周二 23:00-23:59" data-participants="0" style="left: 80%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">23-24</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="time-markers">
-                                        <div class="time-marker" data-time="周日 09:00-10:00" data-start="9" data-end="10" style="left: 0%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">9-10</div>
-                                            <div class="participant-badge">0人</div>
+                                </div>
+                                <div class="day-timeline" data-day="周三">
+                                    <div class="day-label">周三</div>
+                                    <div class="timeline-ruler">
+                                        <div class="timeline-track"></div>
+                                        <div class="time-scale">
+                                            <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
+                                            <span class="scale-mark" style="left: 20%">20:00</span>
+                                            <span class="scale-mark" style="left: 40%">21:00</span>
+                                            <span class="scale-mark" style="left: 60%">22:00</span>
+                                            <span class="scale-mark" style="left: 80%">23:00</span>
+                                            <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
                                         </div>
-                                        <div class="time-marker" data-time="周日 10:00-11:00" data-start="10" data-end="11" style="left: 6.67%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">10-11</div>
-                                            <div class="participant-badge">0人</div>
+                                        <div class="time-markers">
+                                            <div class="time-marker" data-time="周三 19:00-20:00" data-participants="0" style="left: 0%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">19-20</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周三 20:00-21:00" data-participants="0" style="left: 20%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">20-21</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周三 21:00-22:00" data-participants="0" style="left: 40%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">21-22</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周三 22:00-23:00" data-participants="0" style="left: 60%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">22-23</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周三 23:00-23:59" data-participants="0" style="left: 80%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">23-24</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
                                         </div>
-                                        <div class="time-marker" data-time="周日 11:00-12:00" data-start="11" data-end="12" style="left: 13.34%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">11-12</div>
-                                            <div class="participant-badge">0人</div>
+                                    </div>
+                                </div>
+                                <div class="day-timeline" data-day="周四">
+                                    <div class="day-label">周四</div>
+                                    <div class="timeline-ruler">
+                                        <div class="timeline-track"></div>
+                                        <div class="time-scale">
+                                            <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
+                                            <span class="scale-mark" style="left: 20%">20:00</span>
+                                            <span class="scale-mark" style="left: 40%">21:00</span>
+                                            <span class="scale-mark" style="left: 60%">22:00</span>
+                                            <span class="scale-mark" style="left: 80%">23:00</span>
+                                            <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
                                         </div>
-                                        <div class="time-marker" data-time="周日 14:00-15:00" data-start="14" data-end="15" style="left: 33.33%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">14-15</div>
-                                            <div class="participant-badge">0人</div>
+                                        <div class="time-markers">
+                                            <div class="time-marker" data-time="周四 19:00-20:00" data-participants="0" style="left: 0%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">19-20</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周四 20:00-21:00" data-participants="0" style="left: 20%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">20-21</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周四 21:00-22:00" data-participants="0" style="left: 40%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">21-22</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周四 22:00-23:00" data-participants="0" style="left: 60%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">22-23</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周四 23:00-23:59" data-participants="0" style="left: 80%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">23-24</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
                                         </div>
-                                        <div class="time-marker" data-time="周日 15:00-16:00" data-start="15" data-end="16" style="left: 40.00%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">15-16</div>
-                                            <div class="participant-badge">0人</div>
+                                    </div>
+                                </div>
+                                <div class="day-timeline" data-day="周五">
+                                    <div class="day-label">周五</div>
+                                    <div class="timeline-ruler">
+                                        <div class="timeline-track"></div>
+                                        <div class="time-scale">
+                                            <span class="scale-mark scale-mark-first" style="left: 0%">19:00</span>
+                                            <span class="scale-mark" style="left: 20%">20:00</span>
+                                            <span class="scale-mark" style="left: 40%">21:00</span>
+                                            <span class="scale-mark" style="left: 60%">22:00</span>
+                                            <span class="scale-mark" style="left: 80%">23:00</span>
+                                            <span class="scale-mark scale-mark-last" style="left: 100%">24:00</span>
                                         </div>
-                                        <div class="time-marker" data-time="周日 16:00-17:00" data-start="16" data-end="17" style="left: 46.67%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">16-17</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周日 17:00-18:00" data-start="17" data-end="18" style="left: 53.33%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">17-18</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周日 18:00-19:00" data-start="18" data-end="19" style="left: 60.00%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">18-19</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周日 19:00-20:00" data-start="19" data-end="20" style="left: 66.67%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">19-20</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周日 20:00-21:00" data-start="20" data-end="21" style="left: 73.34%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">20-21</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周日 21:00-22:00" data-start="21" data-end="22" style="left: 80.01%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">21-22</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周日 22:00-23:00" data-start="22" data-end="23" style="left: 86.67%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">22-23</div>
-                                            <div class="participant-badge">0人</div>
-                                        </div>
-                                        <div class="time-marker" data-time="周日 23:00-23:59" data-start="23" data-end="24" style="left: 93.34%; width: 6.67%;">
-                                            <div class="marker-segment"></div>
-                                            <div class="marker-label">23-24</div>
-                                            <div class="participant-badge">0人</div>
+                                        <div class="time-markers">
+                                            <div class="time-marker" data-time="周五 19:00-20:00" data-participants="0" style="left: 0%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">19-20</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周五 20:00-21:00" data-participants="0" style="left: 20%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">20-21</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周五 21:00-22:00" data-participants="0" style="left: 40%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">21-22</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周五 22:00-23:00" data-participants="0" style="left: 60%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">22-23</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
+                                            <div class="time-marker" data-time="周五 23:00-23:59" data-participants="0" style="left: 80%; width: 20%;">
+                                                <div class="marker-segment"></div>
+                                                <div class="marker-label">23-24</div>
+                                                <div class="participant-badge">0人</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1763,7 +1653,7 @@
                             </div>
                             <button type="submit" class="submit-btn" id="submitBtn">
                                 🚀 提交约桌申请
-            </button>
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -1785,6 +1675,9 @@
         let selectedTimes = new Set();
         let appointments = [];
         let timeCounts = {};
+        let isDragging = false;
+        let dragStartElement = null;
+        let dragStartSelected = false; // 记录拖拽开始时的选择状态
 
         // 页面初始化
         document.addEventListener('DOMContentLoaded', function() {
@@ -1839,15 +1732,93 @@
                 });
             });
 
-            // 时间轴标记选择
+            // 时间轴标记选择和拖拽
             document.querySelectorAll('.time-marker').forEach(marker => {
-                marker.addEventListener('click', function() {
-                    toggleTimeSelection(this.dataset.time, this);
+                marker.addEventListener('mousedown', startDragSelection);
+                marker.addEventListener('mouseenter', handleDragOver);
+                marker.addEventListener('click', function(e) {
+                    if (!isDragging) {
+                        toggleTimeSelection(this.dataset.time, this);
+                    }
                 });
             });
 
+            // 全局鼠标事件
+            document.addEventListener('mouseup', endDragSelection);
+            document.addEventListener('mouseleave', endDragSelection);
+
             // 表单提交
             document.getElementById('appointmentForm').addEventListener('submit', handleSubmit);
+        }
+
+        // 拖拽选择开始
+        function startDragSelection(e) {
+            e.preventDefault();
+            isDragging = true;
+            dragStartElement = this;
+
+            // 记录拖拽开始时的选择状态
+            const time = this.dataset.time;
+            dragStartSelected = selectedTimes.has(time);
+
+            this.classList.add('drag-selecting');
+
+            // 根据开始状态决定操作
+            if (dragStartSelected) {
+                // 如果已选择，则开始取消选择
+                selectedTimes.delete(time);
+                this.classList.remove('selected');
+            } else {
+                // 如果未选择，则开始选择
+                selectedTimes.add(time);
+                this.classList.add('selected');
+            }
+        }
+
+        // 拖拽经过
+        function handleDragOver(e) {
+            if (isDragging && this !== dragStartElement) {
+                const time = this.dataset.time;
+
+                // 检查是否在同一天的时间轴上
+                const dragDay = dragStartElement.dataset.time.split(' ')[0];
+                const currentDay = time.split(' ')[0];
+
+                if (dragDay === currentDay) {
+                    this.classList.add('drag-selecting');
+
+                    // 根据拖拽开始时的状态进行相应操作
+                    if (dragStartSelected) {
+                        // 取消选择模式
+                        selectedTimes.delete(time);
+                        this.classList.remove('selected');
+                    } else {
+                        // 选择模式
+                        selectedTimes.add(time);
+                        this.classList.add('selected');
+                    }
+                }
+            }
+        }
+
+        // 拖拽选择结束
+        function endDragSelection() {
+            if (isDragging) {
+                isDragging = false;
+                dragStartElement = null;
+
+                // 清除拖拽样式
+                document.querySelectorAll('.time-marker').forEach(marker => {
+                    marker.classList.remove('drag-selecting');
+                });
+
+                updateSelectionDisplay();
+                updateSelectionCounter();
+
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
+            }
         }
 
         // 选择组别
@@ -1894,11 +1865,11 @@
         // 快捷选择
         function quickSelect(type) {
             const weekendTimes = [
-                '周六 09:00-10:00', '周六 10:00-11:00', '周六 11:00-12:00',
+                '周六 09:00-10:00', '周六 10:00-11:00', '周六 11:00-12:00', '周六 12:00-13:00', '周六 13:00-14:00',
                 '周六 14:00-15:00', '周六 15:00-16:00', '周六 16:00-17:00',
                 '周六 17:00-18:00', '周六 18:00-19:00', '周六 19:00-20:00',
                 '周六 20:00-21:00', '周六 21:00-22:00', '周六 22:00-23:00', '周六 23:00-23:59',
-                '周日 09:00-10:00', '周日 10:00-11:00', '周日 11:00-12:00',
+                '周日 09:00-10:00', '周日 10:00-11:00', '周日 11:00-12:00', '周日 12:00-13:00', '周日 13:00-14:00',
                 '周日 14:00-15:00', '周日 15:00-16:00', '周日 16:00-17:00',
                 '周日 17:00-18:00', '周日 18:00-19:00', '周日 19:00-20:00',
                 '周日 20:00-21:00', '周日 21:00-22:00', '周日 22:00-23:00', '周日 23:00-23:59'
@@ -1951,7 +1922,7 @@
                     <div class="selection-item">
                         <span class="selection-time">${time}</span>
                         <button class="delete-btn" onclick="removeSelection('${time}')">删除</button>
-                            </div>
+                    </div>
                 `).join('');
                 container.innerHTML = html;
                 countElement.textContent = `(${selectedTimes.size} 个)`;
@@ -1992,7 +1963,6 @@
 
                 appointments = data || [];
                 updateTimeCounts();
-                updateRecommendations();
                 updateTimeSlotCounts();
 
             } catch (error) {
@@ -2025,112 +1995,21 @@
                 const countElement = marker.querySelector('.participant-badge');
                 const count = timeCounts[time] ? timeCounts[time].count : 0;
                 countElement.textContent = `${count}人`;
+
+                // 更新参与者数量属性，用于CSS颜色显示
+                marker.setAttribute('data-participants', count);
             });
-        }
-
-        // 获取推荐时间
-        function getRecommendations(appointments) {
-            const timeCount = {};
-
-            appointments.forEach(apt => {
-                apt.times.forEach(time => {
-                    if (!timeCount[time]) {
-                        timeCount[time] = {
-                            count: 0,
-                            participants: []
-                        };
-                    }
-                    timeCount[time].count++;
-                    timeCount[time].participants.push(apt.name);
-                });
-            });
-
-            const allRecommendations = Object.entries(timeCount)
-                .map(([time, data]) => ({
-                    time,
-                    count: data.count,
-                    participants: data.participants
-                }))
-                .sort((a, b) => b.count - a.count);
-
-            const fullTables = allRecommendations.filter(r => r.count >= 4);
-            const needOne = allRecommendations.filter(r => r.count === 3);
-
-            return {
-                fullTables,
-                needOne
-            };
-        }
-
-        // 更新推荐显示
-        function updateRecommendations() {
-            const container = document.getElementById('recommendations');
-            const {
-                fullTables,
-                needOne
-            } = getRecommendations(appointments);
-
-            if (fullTables.length === 0 && needOne.length === 0) {
-                container.innerHTML = `
-                    <div class="no-recommendations">
-                        <span class="emoji">🎯</span>
-                        <span class="text">暂无推荐时间，快来约桌吧！</span>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = '';
-
-            if (fullTables.length > 0) {
-                html += `
-                    <div class="recommendation-category">
-                        <div class="category-title full-table">🎉 已成局 (4人桌)</div>
-                        <div class="recommendation-list">
-                            ${fullTables.slice(0, 3).map(rec => `
-                                <div class="recommendation-item">
-                                    <div class="time-info">${rec.time}</div>
-                                    <div class="participant-info">${rec.participants.join(', ')} (${rec.count}人)</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            if (needOne.length > 0) {
-                html += `
-                    <div class="recommendation-category">
-                        <div class="category-title need-one">⏰ 三缺一</div>
-                        <div class="recommendation-list">
-                            ${needOne.slice(0, 3).map(rec => `
-                                <div class="recommendation-item">
-                                    <div class="time-info">${rec.time}</div>
-                                    <div class="participant-info">${rec.participants.join(', ')} (${rec.count}人)</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            }
-            
-            container.innerHTML = html;
         }
 
         // 处理表单提交
         async function handleSubmit(e) {
             e.preventDefault();
-            
+
             if (!currentGroup) {
                 showNotification('请先选择组别', 'error');
                 return;
             }
-            
-            if (selectedTimes.size === 0) {
-                showNotification('请至少选择一个时间段', 'error');
-                return;
-            }
-            
+
             const userName = document.getElementById('userName').value.trim();
             if (!userName) {
                 showNotification('请输入昵称', 'error');
@@ -2141,7 +2020,7 @@
             submitBtn.disabled = true;
             submitBtn.classList.add('loading');
             submitBtn.innerHTML = '提交中...';
-            
+
             try {
                 // 删除该用户在当前组的所有记录
                 await supabaseClient
@@ -2149,28 +2028,36 @@
                     .delete()
                     .eq('group', currentGroup)
                     .eq('name', userName);
-                
-                // 插入新记录
-                const { error } = await supabaseClient
-                    .from('appointments')
-                    .insert([{
-                    group: currentGroup,
-                    name: userName,
-                        times: Array.from(selectedTimes)
-                    }]);
-                        
-                        if (error) throw error;
-                
+
+                // 如果有选择时间，则插入新记录
+                if (selectedTimes.size > 0) {
+                    const {
+                        error
+                    } = await supabaseClient
+                        .from('appointments')
+                        .insert([{
+                            group: currentGroup,
+                            name: userName,
+                            times: Array.from(selectedTimes)
+                        }]);
+
+                    if (error) throw error;
+                }
+
                 // 保存用户偏好
                 localStorage.setItem('userName', userName);
                 localStorage.setItem(`selectedTimes_${currentGroup}`, JSON.stringify(Array.from(selectedTimes)));
-                
-                // 显示成功提示（更明显的提示）
-                showNotification('🎉 约桌提交成功！\n您的时间选择已保存', 'success');
-                
+
+                // 显示成功提示（缩短时间）
+                if (selectedTimes.size > 0) {
+                    showNotification('🎉 约桌提交成功！\n您的时间选择已保存', 'success');
+                } else {
+                    showNotification('✅ 清空成功！\n已移除您的所有选择', 'success');
+                }
+
                 // 重新加载数据
                 await loadAppointments();
-                
+
                 // 成功动画
                 submitBtn.style.transform = 'scale(1.05)';
                 setTimeout(() => {
@@ -2195,10 +2082,10 @@
             }
         }
 
-        // 显示通知 - 重新设计
+        // 显示通知 - 缩短持续时间
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
-            
+
             // 清除之前的类
             notification.className = 'notification';
             notification.textContent = message;
@@ -2207,40 +2094,20 @@
             setTimeout(() => {
                 notification.classList.add(type, 'show');
             }, 10);
-            
-            // 自动隐藏
-                setTimeout(() => {
+
+            // 自动隐藏 - 缩短时间
+            setTimeout(() => {
                 notification.classList.remove('show');
                 setTimeout(() => {
                     notification.className = 'notification';
                 }, 400);
-            }, type === 'success' ? 4000 : 3000);
-            
+            }, type === 'success' ? 1500 : 1200);
+
             // 添加点击关闭功能
             notification.onclick = () => {
                 notification.classList.remove('show');
             };
         }
-
-        // 折叠/展开工作日 (此功能已移除)
-        /*
-        function toggleWeekdays() {
-            const container = document.getElementById('weekdaysSection');
-            const toggle = container.querySelector('.weekdays-toggle');
-            
-            container.classList.toggle('collapsed');
-            
-            if (container.classList.contains('collapsed')) {
-                toggle.textContent = '▶';
-            } else {
-                toggle.textContent = '▼';
-            }
-            
-            if (navigator.vibrate) {
-                navigator.vibrate(30);
-            }
-        }
-        */
     </script>
 </body>
 
